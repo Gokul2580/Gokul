@@ -28,42 +28,6 @@
       margin-bottom: 20px;
     }
 
-/* Highlight Container - Gradient Border with spacing */
-.highlight {
-  flex: 0 0 auto;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border: 5px solid; /* Add space around the highlight with gradients */
-  border-image-source: linear-gradient(to right, #ff7eb3, #ff758c);
-  border-image-repeat: stretch;
-  border-image-width: 5;
-  transition: transform 0.2s ease-in-out;
-}
-
-/* Caption under each highlight */
-.highlight-caption {
-  text-align: center;
-  font-size: 12px;
-  margin-top: 5px;
-  color: #555;
-}
-
-/* Video captions at the bottom of video modal */
-.story-caption {
-  position: absolute;
-  bottom: 10px;
-  left: 20px;
-  font-size: 16px;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-
     /* Highlight Container */
     .highlights-container {
       display: flex;
@@ -352,54 +316,37 @@
     <script>
     // JavaScript for Modal and Video Playback
     document.addEventListener("DOMContentLoaded", () => {
-  const highlights = document.querySelectorAll(".highlight");
-  const modal = document.getElementById("videoModal");
-  const videoPlayer = document.getElementById("videoPlayer");
-  const closeModal = document.getElementById("closeModal");
-  const storyCaption = document.getElementById("storyCaption");
+      const highlights = document.querySelectorAll(".highlight");
+      const modal = document.getElementById("videoModal");
+      const videoPlayer = document.getElementById("videoPlayer");
+      const closeModal = document.getElementById("closeModal");
 
-  const videos = [
-    { src: "https://www.w3schools.com/html/mov_bbb.mp4", caption: "Tech Video 1" },
-    { src: "https://www.w3schools.com/html/movie.mp4", caption: "Tech Video 2" },
-    { src: "https://via.placeholder.com/video.mp4", caption: "Tech Video 3" },
-    { src: "https://via.placeholder.com/video.mp4", caption: "Tech Video 4" },
-  ];
+      // Open modal and play video
+      highlights.forEach(highlight => {
+        highlight.addEventListener("click", () => {
+          const videoSrc = highlight.getAttribute("data-video");
+          videoPlayer.src = videoSrc;
+          modal.classList.add("active");
+          videoPlayer.play();
+        });
+      });
 
-  let currentStoryIndex = 0;
+      // Close modal
+      closeModal.addEventListener("click", () => {
+        modal.classList.remove("active");
+        videoPlayer.pause();
+        videoPlayer.src = ""; // Stop video playback
+      });
 
-  // Open Modal with the clicked story
-  highlights.forEach((highlight, index) => {
-    highlight.addEventListener("click", () => {
-      modal.classList.add("active");
-      videoPlayer.src = videos[index].src;
-      storyCaption.innerText = videos[index].caption;
-      videoPlayer.play();
-      currentStoryIndex = index;
+      // Close modal when clicking outside content
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.remove("active");
+          videoPlayer.pause();
+          videoPlayer.src = ""; // Stop video playback
+        }
+      });
     });
-  });
-
-  closeModal.addEventListener("click", () => {
-    modal.classList.remove("active");
-    videoPlayer.pause();
-  });
-
-  // Swipe feature simulation
-  document.addEventListener("keydown", (e) => {
-    if (modal.classList.contains("active")) {
-      if (e.key === "ArrowRight") {
-        // Next Video
-        currentStoryIndex = (currentStoryIndex + 1) % videos.length;
-      } else if (e.key === "ArrowLeft") {
-        // Previous Video
-        currentStoryIndex = (currentStoryIndex - 1 + videos.length) % videos.length;
-      }
-      videoPlayer.src = videos[currentStoryIndex].src;
-      storyCaption.innerText = videos[currentStoryIndex].caption;
-      videoPlayer.play();
-    }
-  });
-});
-
   </script>
   
   
@@ -441,29 +388,28 @@
       </div>
       
       
-      <!-- Highlight Section with Captions -->
-<div class="highlights-container">
-  <div class="highlight" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
-    <img src="https://via.placeholder.com/90" alt="Highlight 1">
-    <div class="highlight-caption">Story 1</div>
+        <div class="highlights-container">
+    <div class="highlight" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
+      <img src="https://via.placeholder.com/80" alt="Highlight 1">
+    </div>
+    <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
+      <img src="https://via.placeholder.com/80/ff0000" alt="Highlight 2">
+    </div>
+    <div class="highlight" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
+      <img src="https://via.placeholder.com/80/00ff00" alt="Highlight 3">
+    </div>
+    <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
+      <img src="https://via.placeholder.com/80/0000ff" alt="Highlight 4">
+    </div>
   </div>
-  <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
-    <img src="https://via.placeholder.com/90/ff0000" alt="Highlight 2">
-    <div class="highlight-caption">Story 2</div>
-  </div>
-  <div class="highlight" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
-    <img src="https://via.placeholder.com/90/00ff00" alt="Highlight 3">
-    <div class="highlight-caption">Story 3</div>
-  </div>
-  <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
-    <img src="https://via.placeholder.com/90/0000ff" alt="Highlight 4">
-    <div class="highlight-caption">Story 4</div>
-  </div>
-</div>
 
-</div>
-</div>
 
+
+
+      
+      
+    </div>
+  </div>
   
   
     <!-- Modal -->
