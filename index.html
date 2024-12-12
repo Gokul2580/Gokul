@@ -1,450 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Video Background</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Material Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"> <!-- Poppins Font -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body,
-    html {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    
-    
-        h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    /* Highlight Container */
-    .highlights-container {
-      display: flex;
-      overflow-x: auto;
-      gap: 10px;
-      padding: 10px;
-      background: transparent;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .highlight {
-      flex: 0 0 auto;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: #ddd;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid #007bff;
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out;
-    }
-
-    .highlight:hover {
-      transform: scale(1.1);
-    }
-
-    .highlight img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      position: relative;
-      width: 90%;
-      max-width: 600px;
-      background-color: black;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .modal-content video {
-      width: 100%;
-      height: auto;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    .modal-close:hover {
-      color: #ffcc00;
-    }
-    
-
-    /* Toolbar Styles */
-    .toolbar {
-      display: flex;
-      height: 75px;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #1e90ff;
-      color: white;
-      padding: 10px 20px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 4;
-    }
-
-    .toolbar .title {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .toolbar .toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .toolbar .search-icon {
-      font-size: 2rem;
-      cursor: pointer;
-    }
-
-    .toolbar .social-icons {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .toolbar .social-icons i {
-      font-size: 1.3rem;
-      color: white;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .toolbar .social-icons i:hover {
-      color: #ffcc00;
-    }
-
-    /* Video Background */
-    .video-container {
-      position: relative;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .video-container video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
-    }
-
-    .video-container .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 2;
-    }
-
-    .video-container .content {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .video-container .content h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      animation: fade-in 3s ease-in-out;
-    }
-
-    .video-container .content h2 {
-      font-size: 1.5rem;
-      color: #ffcc00;
-      margin-bottom: 0.5rem;
-      animation: fade-in 3s ease-in-out 2s;
-    }
-
-    .video-container .content p {
-      font-size: 1.5rem;
-      animation: fade-in 3s ease-in-out 4s;
-    }
-
-    .video-container .content button {
-      padding: 10px 20px;
-      font-size: 1.8rem;
-      color: #fff;
-      background-color: #007bff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 20px;
-    }
-
-    .video-container .content button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Profile Section */
-    .profile-section {
-      text-align: center;
-      padding: 40px 20px;
-      background-color: #1e90ff;
-      color: white;
-    }
-
-    .profile-section img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 3px solid white;
-      margin-bottom: 10px;
-    }
-
-    .profile-section h3 {
-      font-size: 1.8rem;
-      margin-bottom: 5px;
-    }
-
-    .profile-section p {
-      font-size: 1.2rem;
-      color: #ffcc00;
-      margin-bottom: 20px;
-    }
-
-    .skills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 10px;
-    }
-    
-      /* Animated Arrow */
-    .arrow-down {
-      margin-top: 20px;
-      font-size: 2rem;
-      color: #fff;
-      animation: bounce 1.5s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-10px);
-      }
-      60% {
-        transform: translateY(-5px);
-      }
-    }
-
-    .chip {
-      display: inline-block;
-      padding: 10px 15px;
-      background-color: #007bff;
-      color: white;
-      font-size: 1rem;
-      border-radius: 20px;
-      cursor: default;
-    }
-
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
-  
-    <script>
-    // JavaScript for Modal and Video Playback
-    document.addEventListener("DOMContentLoaded", () => {
-      const highlights = document.querySelectorAll(".highlight");
-      const modal = document.getElementById("videoModal");
-      const videoPlayer = document.getElementById("videoPlayer");
-      const closeModal = document.getElementById("closeModal");
-
-      // Open modal and play video
-      highlights.forEach(highlight => {
-        highlight.addEventListener("click", () => {
-          const videoSrc = highlight.getAttribute("data-video");
-          videoPlayer.src = videoSrc;
-          modal.classList.add("active");
-          videoPlayer.play();
-        });
-      });
-
-      // Close modal
-      closeModal.addEventListener("click", () => {
-        modal.classList.remove("active");
-        videoPlayer.pause();
-        videoPlayer.src = ""; // Stop video playback
-      });
-
-      // Close modal when clicking outside content
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.classList.remove("active");
-          videoPlayer.pause();
-          videoPlayer.src = ""; // Stop video playback
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      });
-    });
-  </script>
-  
-  
-  
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        /* Header Section */
+        .header {
+            background-color: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .live-banner {
+            background-color: #FF6F00;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+        }
+
+        .live-banner p {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .download-btn {
+            background-color: #fff;
+            color: #FF6F00;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 20px;
+            background-color: white;
+        }
+
+        .categories h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .category-list {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .category-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .category-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .category-item p {
+            margin-top: 10px;
+        }
+
+        /* Stores Section */
+        .stores {
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .store {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .store-logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .store-info p {
+            margin: 5px 0;
+        }
+
+        /* Footer Navigation */
+        .footer {
+            display: flex;
+            justify-content: space-evenly;
+            background-color: #FF6F00;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        .nav-btn {
+            background-color: white;
+            color: #FF6F00;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    </style>
 </head>
-
 <body>
-  <!-- Toolbar -->
-  <div class="toolbar">
-    <div class="title">Goks</div>
-    <div class="toolbar-right">
-      <div class="search-icon">
-        <span class="material-icons">search</span>
-      </div>
-      <div class="social-icons">
-        <i class="fab fa-facebook-f"></i>
-        <i class="fab fa-twitter"></i>
-        <i class="fab fa-instagram"></i>
-        <i class="fab fa-linkedin-in"></i>
-      </div>
-    </div>
-  </div>
 
-  <!-- Video Container -->
-  <div class="video-container">
-    <video autoplay muted loop>
-      <source src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/Video_20241101213717488_by_VideoShow.mp4?alt=media&token=c995ebc5-9e2b-4645-b27b-e0df0d697fdd" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <div class="overlay"></div>
-
-    <div class="content">
-<br>
-<br>
-<br>
-      <h1>Welcome Dude, I'm Gokul</h1>
-      <h2>Founder and CEO of Thatwamasi Infotech</h2>
-      <p>Discover more</p>
-      <button onclick="alert('Explore more!')">WhatsApp</button>
-      <div class="arrow-down">
-        <i class="fas fa-chevron-down"></i>
-      </div>
-      
-      
-        <div class="highlights-container">
-    <div class="highlight" data-video="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/punidhavelcreation-20241004-0001.mp4?alt=media&token=6cb5c162-883f-4495-994d-b1b84e56ff62">
-      <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/images%20-%202024-12-08T154439.468.jpeg?alt=media&token=4c9bdac4-9949-4500-8316-3e0074e02482 alt="Highlight 1">
+    <!-- Header Section -->
+    <div class="header">
+        <div class="live-banner">
+            <p>WE ARE LIVE NOW</p>
+            <button class="download-btn">Download the App & Order Now</button>
+        </div>
     </div>
-    <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
-      <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/IMG_20241208_130102.jpg?alt=media&token=ccabd333-66e7-43bd-b542-665282c72d15" alt="Highlight 2">
-    </div>
-    <div class="highlight" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
-      <img src="https://via.placeholder.com/80/00ff00" alt="Highlight 3">
-    </div>
-    <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
-      <img src="https://via.placeholder.com/80/0000ff" alt="Highlight 4">
-    </div>
-  </div>
 
+    <!-- Categories Section -->
+    <section class="categories">
+        <h2>Categories</h2>
+        <div class="category-list">
+            <div class="category-item">
+                <img src="https://via.placeholder.com/100" alt="Beauty Products">
+                <p>Beauty Products</p>
+            </div>
+            <div class="category-item">
+                <img src="https://via.placeholder.com/100" alt="Dry Fruits">
+                <p>Dry Fruits</p>
+            </div>
+            <div class="category-item">
+                <img src="https://via.placeholder.com/100" alt="Fruits">
+                <p>Fruits</p>
+            </div>
+        </div>
+    </section>
 
+    <!-- Stores Section -->
+    <section class="stores">
+        <h2>Stores</h2>
+        <div class="store">
+            <div class="store-logo">
+                <img src="https://via.placeholder.com/50" alt="Store Logo">
+            </div>
+            <div class="store-info">
+                <p><strong>VAMSHI FARMS</strong></p>
+                <p>GACHIBOWLI</p>
+                <p>Organic Store</p>
+                <p>greenspace building, 4th floor, Hyderabad</p>
+            </div>
+        </div>
+    </section>
 
-
-      
-      
+    <!-- Footer Navigation -->
+    <div class="footer">
+        <button class="nav-btn">Shop</button>
+        <button class="nav-btn">Chat</button>
+        <button class="nav-btn">Track</button>
     </div>
-  </div>
-  
-  
-    <!-- Modal -->
-  <div class="modal" id="videoModal">
-    <div class="modal-content">
-      <button class="modal-close" id="closeModal">&times;</button>
-      <video id="videoPlayer" controls></video>
-    </div>
-  </div>
-  
-  
-  
-  
 
-  <!-- Profile Section -->
-  
-  
-  
-  <div class="profile-section">
-    <img src="https://via.placeholder.com/120" alt="Gokul's Profile">
-    <h3>Gokul</h3>
-    <p>Developer | Problem Solver | Entrepreneur</p>
+    <script>
+        // Example JavaScript (You can expand functionality as needed)
+        document.querySelector('.download-btn').addEventListener('click', function() {
+            alert('Redirecting to download page...');
+        });
+    </script>
 
-    <!-- Skills -->
-    <div class="skills">
-      <div class="chip">Android Development</div>
-      <div class="chip">Web Development</div>
-      <div class="chip">UI/UX Design</div>
-      <div class="chip">Problem Solving</div>
-      <div class="chip">Editing</div>
-    </div>
-  </div>
 </body>
-
 </html>
