@@ -1,142 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>UI from image</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materialistic Toolbar with Animated Carousel</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      background-color: #f0f0f0;
-    }
+        body {
+            font-family: Arial, sans-serif;
+        }
 
-    .header .left {
-      display: flex;
-      align-items: center;
-    }
+        /* Material Toolbar */
+        .toolbar {
+            background-color: #6200ea;
+            padding: 15px 20px;
+            color: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
 
-    .header .left .arrow {
-      margin-right: 10px;
-    }
+        .toolbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .header .left .location {
-      font-size: 16px;
-      font-weight: bold;
-    }
+        .toolbar-name {
+            font-size: 20px;
+        }
 
-    .header .right {
-      display: flex;
-      align-items: center;
-    }
+        .toolbar-icon {
+            font-size: 30px;
+        }
 
-    .header .right .search {
-      margin-right: 10px;
-    }
+        /* Carousel Styling */
+        .carousel-container {
+            margin-top: 80px; /* To avoid toolbar overlap */
+            position: relative;
+            overflow: hidden;
+        }
 
-    .header .right .profile {
-      border-radius: 50%;
-    }
+        .carousel {
+            display: flex;
+            transition: transform 1s ease-in-out;
+        }
 
-    .banner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px;
-      background-color: #fff;
-    }
+        .carousel-slide {
+            min-width: 100%;
+        }
 
-    .banner .left {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+        .carousel-slide img {
+            width: 100%;
+            height: auto;
+        }
 
-    .banner .left h1 {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+        /* Animation for carousel */
+        @keyframes carousel-slide {
+            0% {
+                transform: translateX(0);
+            }
+            33% {
+                transform: translateX(-100%);
+            }
+            66% {
+                transform: translateX(-200%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
 
-    .banner .left p {
-      font-size: 16px;
-    }
-
-    .banner .right {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .banner .right img {
-      width: 150px;
-      height: auto;
-    }
-
-    .categories {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
- padding: 20px;
-      background-color: #f9f9f9;
-    }
-
-    .categories .category {
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      margin: 0 5px;
-      background-color: #fff;
-      transition: background-color 0.3s;
-    }
-
-    .categories .category:hover {
-      background-color: #e0e0e0;
-    }
-
-    .footer {
-      padding: 20px;
-      text-align: center;
-      background-color: #f0f0f0;
-    }
-  </style>
+        .carousel-container {
+            animation: carousel-slide 9s infinite;
+        }
+    </style>
 </head>
 <body>
-  <div class="header">
-    <div class="left">
-      <div class="arrow">←</div>
-      <div class="location">Current Location</div>
-    </div>
-    <div class="right">
-      <input type="text" class="search" placeholder="Search...">
-      <img src="profile.jpg" alt="Profile" class="profile" width="40">
-    </div>
-  </div>
-  <div class="banner">
-    <div class="left">
-      <h1>Welcome to Our Service</h1>
-      <p>Discover amazing experiences.</p>
-    </div>
-    <div class="right">
-      <img src="banner-image.jpg" alt="Banner Image">
-    </div>
-  </div>
-  <div class="categories">
-    <div class="category">Category 1</div>
-    <div class="category">Category 2</div>
-    <div class="category">Category 3</div>
-  </div>
-  <div class="footer">
-    &copy; 2023 Your Company. All rights reserved.
-  </div>
+    <!-- Material Toolbar -->
+    <header class="toolbar">
+        <div class="toolbar-content">
+            <span class="toolbar-name">Your Name</span>
+            <span class="material-icons toolbar-icon">location_on</span>
+        </div>
+    </header>
+
+    <!-- Carousel Banner -->
+    <section class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-slide">
+                <img src="https://via.placeholder.com/600x300?text=Slide+1" alt="Slide 1">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://via.placeholder.com/600x300?text=Slide+2" alt="Slide 2">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://via.placeholder.com/600x300?text=Slide+3" alt="Slide 3">
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // JS not required for carousel animation as CSS handles it.
+        // You can add more advanced control here if necessary (e.g., manual controls or infinite loop).
+    </script>
 </body>
 </html>
