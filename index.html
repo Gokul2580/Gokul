@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materialistic Toolbar with ViewPager</title>
+    <title>Materialistic Toolbar with ViewPager Carousel</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         /* Basic Reset */
@@ -42,26 +42,29 @@
             font-size: 30px;
         }
 
-        /* ViewPager Styling */
-        .viewpager-container {
+        /* Carousel ViewPager Styling */
+        .carousel-container {
             margin-top: 80px; /* To avoid toolbar overlap */
             position: relative;
             overflow: hidden;
+            width: 100%;
+            height: 300px; /* Height of the carousel */
         }
 
-        .viewpager {
+        .carousel {
             display: flex;
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.3s ease;
+            touch-action: pan-y; /* Allow swipe gesture */
         }
 
-        .viewpager-slide {
+        .carousel-slide {
             min-width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .viewpager-slide img {
+        .carousel-slide img {
             width: 100%;
             height: auto;
             border-radius: 10px;
@@ -99,31 +102,31 @@
         </div>
     </header>
 
-    <!-- ViewPager Section -->
-    <section class="viewpager-container">
-        <div class="viewpager">
-            <div class="viewpager-slide">
+    <!-- Carousel ViewPager Section -->
+    <section class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-slide">
                 <img src="https://via.placeholder.com/600x300?text=Slide+1" alt="Slide 1">
             </div>
-            <div class="viewpager-slide">
+            <div class="carousel-slide">
                 <img src="https://via.placeholder.com/600x300?text=Slide+2" alt="Slide 2">
             </div>
-            <div class="viewpager-slide">
+            <div class="carousel-slide">
                 <img src="https://via.placeholder.com/600x300?text=Slide+3" alt="Slide 3">
             </div>
         </div>
-        
+
         <!-- Navigation Buttons -->
         <button class="nav-btn prev-btn">&#8249;</button>
         <button class="nav-btn next-btn">&#8250;</button>
     </section>
 
     <script>
-        // JavaScript to handle ViewPager-like behavior
+        // JavaScript to handle ViewPager carousel behavior
         let currentIndex = 0;
-        const slides = document.querySelectorAll('.viewpager-slide');
+        const slides = document.querySelectorAll('.carousel-slide');
         const totalSlides = slides.length;
-        const viewpager = document.querySelector('.viewpager');
+        const carousel = document.querySelector('.carousel');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
 
@@ -132,15 +135,32 @@
             if (index < 0) index = totalSlides - 1; // Loop to the last slide
             if (index >= totalSlides) index = 0; // Loop to the first slide
             currentIndex = index;
-            viewpager.style.transform = `translateX(-${currentIndex * 100}%)`;
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
 
         // Event listeners for navigation buttons
         prevBtn.addEventListener('click', () => changeSlide(currentIndex - 1));
         nextBtn.addEventListener('click', () => changeSlide(currentIndex + 1));
 
-        // Optionabl: Auto-slide every 3 seconds
+        // Optional: Auto-slide every 3 seconds
         setInterval(() => changeSlide(currentIndex + 1), 3000);
+
+        // Optional: Add swipe functionality for mobile
+        let startX = 0;
+        let endX = 0;
+
+        carousel.addEventListener('touchstart', (e) => {
+            startX = e.changedTouches[0].screenX;
+        });
+
+        carousel.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].screenX;
+            if (startX - endX > 50) {
+                changeSlide(currentIndex + 1); // Swipe left (next)
+            } else if (endX - startX > 50) {
+                changeSlide(currentIndex - 1); // Swipe right (previous)
+            }
+        });
     </script>
 </body>
 </html>
