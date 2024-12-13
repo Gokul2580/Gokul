@@ -30,14 +30,71 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
-    nav .wrapper {
-      max-width: 1200px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-    }
+    /* General Styles */
+nav .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Hamburger Menu Visibility */
+.wrapper .btn.menu-btn {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.wrapper .btn.close-btn {
+  display: none;
+}
+
+/* Mobile View */
+@media screen and (max-width: 970px) {
+  .wrapper .btn.menu-btn {
+    display: block; /* Show hamburger menu button */
+    z-index: 101; /* Ensure visibility above other elements */
+  }
+
+  /* Hide nav links by default */
+  .wrapper .nav-links {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    max-width: 350px;
+    top: 0;
+    left: -100%; /* Off-screen initially */
+    background: #242526;
+    display: block;
+    padding: 50px 10px;
+    line-height: 50px;
+    overflow-y: auto;
+    box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.18);
+    transition: all 0.3s ease;
+  }
+
+  /* Show nav links when menu button is checked */
+  #menu-btn:checked ~ .nav-links {
+    left: 0%; /* Slide into view */
+  }
+
+  /* Hide menu button when menu is open */
+  #menu-btn:checked ~ .btn.menu-btn {
+    display: none;
+  }
+
+  /* Close button for mobile menu */
+  .wrapper .btn.close-btn {
+    display: block; /* Show close button */
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    z-index: 102;
+    cursor: pointer;
+  }
+}
+
 
     .logo a {
       text-decoration: none;
@@ -167,35 +224,61 @@
 <nav>
   <div class="wrapper">
     <div class="logo"><a href="#">Logo</a></div>
-    <input type="checkbox" id="menu-btn" class="btn">
-    <label for="menu-btn" class="btn"><i class="fas fa-bars"></i></label>
+    <!-- Menu Button -->
+    <input type="checkbox" id="menu-btn">
+    <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+    <!-- Navigation Links -->
     <ul class="nav-links">
+      <label for="menu-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
       <li><a href="#">Home</a></li>
       <li><a href="#">About</a></li>
       <li>
-        <a href="#">Dropdown Menu</a>
+        <a href="#" class="desktop-item">Dropdown Menu</a>
+        <input type="checkbox" id="showDrop">
+        <label for="showDrop" class="mobile-item">Dropdown Menu</label>
         <ul class="drop-menu">
-          <li><a href="#">Menu 1</a></li>
-          <li><a href="#">Menu 2</a></li>
-          <li><a href="#">Menu 3</a></li>
+          <li><a href="#">Drop menu 1</a></li>
+          <li><a href="#">Drop menu 2</a></li>
+          <li><a href="#">Drop menu 3</a></li>
+          <li><a href="#">Drop menu 4</a></li>
         </ul>
       </li>
       <li>
-        <a href="#">Mega Menu</a>
+        <a href="#" class="desktop-item">Mega Menu</a>
+        <input type="checkbox" id="showMega">
+        <label for="showMega" class="mobile-item">Mega Menu</label>
         <div class="mega-box">
           <div class="content">
-            <header>Design Services</header>
-            <ul>
-              <li><a href="#">Graphics</a></li>
-              <li><a href="#">Vectors</a></li>
-            </ul>
-          </div>
-          <div class="content">
-            <header>Marketing</header>
-            <ul>
-              <li><a href="#">SEO</a></li>
-              <li><a href="#">Email Marketing</a></li>
-            </ul>
+            <div class="row">
+              <img src="https://fadzrinmadu.github.io/hosted-assets/responsive-mega-menu-and-dropdown-menu-using-only-html-and-css/img.jpg" alt="">
+            </div>
+            <div class="row">
+              <header>Design Services</header>
+              <ul class="mega-links">
+                <li><a href="#">Graphics</a></li>
+                <li><a href="#">Vectors</a></li>
+                <li><a href="#">Business cards</a></li>
+                <li><a href="#">Custom logo</a></li>
+              </ul>
+            </div>
+            <div class="row">
+              <header>Email Services</header>
+              <ul class="mega-links">
+                <li><a href="#">Personal Email</a></li>
+                <li><a href="#">Business Email</a></li>
+                <li><a href="#">Mobile Email</a></li>
+                <li><a href="#">Web Marketing</a></li>
+              </ul>
+            </div>
+            <div class="row">
+              <header>Security services</header>
+              <ul class="mega-links">
+                <li><a href="#">Site Seal</a></li>
+                <li><a href="#">VPS Hosting</a></li>
+                <li><a href="#">Privacy Seal</a></li>
+                <li><a href="#">Website design</a></li>
+              </ul>
+            </div>
           </div>
         </div>
       </li>
@@ -203,5 +286,6 @@
     </ul>
   </div>
 </nav>
+
 </body>
 </html>
