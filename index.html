@@ -9,23 +9,8 @@
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css'>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css'>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'></script>
-  <script>
-  
-  $(".custom-carousel").owlCarousel({
-  autoWidth: true,
-  loop: true
-});
-$(document).ready(function () {
-  $(".custom-carousel .item").click(function () {
-    $(".custom-carousel .item").not($(this)).removeClass("active");
-    $(this).toggleClass("active");
-  });
-});
 
   
-  </script>
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 *{
@@ -625,7 +610,6 @@ button {
   </div>
 </nav>
   <br><br><br>
-<body>
 <!-- partial:index.partial.html -->
 <section class="game-section">
   <h2 class="line-title">trending games</h2>
@@ -677,11 +661,23 @@ button {
 </section>
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'></script><script  src="./script.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'></script>
 
-</body>
+<script>
+  
+  $(".custom-carousel").owlCarousel({
+  autoWidth: true,
+  loop: true
+});
+$(document).ready(function () {
+  $(".custom-carousel .item").click(function () {
+    $(".custom-carousel .item").not($(this)).removeClass("active");
+    $(this).toggleClass("active");
+  });
+});
 
-
+  
+  </script>
 
 <!-- partial -->
 
