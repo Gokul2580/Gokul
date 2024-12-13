@@ -3,13 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UI Example</title>
+  <title>Material Design UI</title>
+  <!-- Google Fonts and Material Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     /* General Styles */
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
     /* Top Bar */
@@ -19,20 +27,20 @@
       align-items: center;
       padding: 10px 15px;
       background-color: #ffffff;
-      border-bottom: 1px solid #e0e0e0;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .location {
       display: flex;
       align-items: center;
       font-size: 14px;
+      color: #333;
     }
 
-    .location select {
-      margin-left: 5px;
-      border: none;
-      background: transparent;
-      font-size: 14px;
+    .location .material-icons {
+      font-size: 20px;
+      color: #f44336;
+      margin-right: 5px;
     }
 
     .social-icons {
@@ -40,9 +48,9 @@
       gap: 10px;
     }
 
-    .social-icons img {
-      width: 18px;
-      height: 18px;
+    .social-icons .material-icons {
+      font-size: 20px;
+      color: #757575;
     }
 
     /* Search Bar */
@@ -51,6 +59,7 @@
       align-items: center;
       padding: 10px 15px;
       background-color: #ffffff;
+      margin-top: 5px;
     }
 
     .search-bar input {
@@ -59,15 +68,16 @@
       font-size: 14px;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
-      margin-right: 10px;
+      outline: none;
     }
 
-    .search-bar img {
-      width: 24px;
-      height: 24px;
+    .search-bar .material-icons {
+      font-size: 24px;
+      color: #757575;
+      margin-left: 10px;
     }
 
-    /* Banner */
+    /* Banner Section */
     .banner {
       margin: 15px;
       display: flex;
@@ -80,6 +90,7 @@
       width: 100%;
       max-width: 300px;
       border-radius: 10px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     /* Categories Section */
@@ -90,6 +101,7 @@
     .categories h2 {
       font-size: 18px;
       margin-bottom: 10px;
+      color: #333;
     }
 
     .categories .category-list {
@@ -107,11 +119,13 @@
       width: 100%;
       max-width: 80px;
       border-radius: 8px;
+      margin-bottom: 5px;
     }
 
     .category-item p {
       font-size: 14px;
-      margin-top: 5px;
+      margin: 0;
+      color: #555;
     }
 
     /* Stores Section */
@@ -122,6 +136,7 @@
     .stores h2 {
       font-size: 18px;
       margin-bottom: 10px;
+      color: #333;
     }
 
     .store-filters {
@@ -137,6 +152,7 @@
       font-size: 14px;
       background-color: #ffffff;
       cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .store-filters button.active {
@@ -152,6 +168,7 @@
       padding: 10px;
       background-color: #ffffff;
       border-radius: 10px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
       margin-bottom: 10px;
     }
 
@@ -168,6 +185,7 @@
     .store-info h3 {
       margin: 0;
       font-size: 16px;
+      color: #333;
     }
 
     .store-info p {
@@ -189,9 +207,13 @@
       border-top: 1px solid #e0e0e0;
     }
 
-    .bottom-nav img {
-      width: 24px;
-      height: 24px;
+    .bottom-nav .material-icons {
+      font-size: 24px;
+      color: #757575;
+    }
+
+    .bottom-nav .active {
+      color: #f44336;
     }
   </style>
 </head>
@@ -199,22 +221,20 @@
   <!-- Top Bar -->
   <div class="top-bar">
     <div class="location">
+      <span class="material-icons">location_on</span>
       <span>12, yy, Chinnapallap...</span>
-      <select>
-        <option>Change</option>
-      </select>
     </div>
     <div class="social-icons">
-      <img src="https://via.placeholder.com/18" alt="Icon 1">
-      <img src="https://via.placeholder.com/18" alt="Icon 2">
-      <img src="https://via.placeholder.com/18" alt="Icon 3">
+      <span class="material-icons">facebook</span>
+      <span class="material-icons">instagram</span>
+      <span class="material-icons">twitter</span>
     </div>
   </div>
 
   <!-- Search Bar -->
   <div class="search-bar">
     <input type="text" placeholder="Search">
-    <img src="https://via.placeholder.com/24" alt="Profile">
+    <span class="material-icons">account_circle</span>
   </div>
 
   <!-- Banner -->
@@ -263,9 +283,9 @@
 
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
-    <img src="https://via.placeholder.com/24" alt="Shop">
-    <img src="https://via.placeholder.com/24" alt="Chat">
-    <img src="https://via.placeholder.com/24" alt="Cart">
+    <span class="material-icons active">home</span>
+    <span class="material-icons">chat</span>
+    <span class="material-icons">shopping_cart</span>
   </div>
 </body>
 </html>
