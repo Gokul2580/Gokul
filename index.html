@@ -1,758 +1,140 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Mega Menu and Dropdown Menu using only HTML &amp; CSS</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css'>
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css'>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-
-
-
-  
-  <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-nav{
-  position: fixed;
-  z-index: 99;
-  width: 100%;
-  
-  background: #242526;
-}
-nav .wrapper{
-  position: relative;
-  max-width: 1300px;
-  padding: 0px 30px;
-  height: 70px;
-  line-height: 70px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.wrapper .logo a{
-  color: #f2f2f2;
-  font-size: 30px;
-  font-weight: 600;
-  text-decoration: none;
-}
-.wrapper .nav-links{
-  display: inline-flex;
-}
-.nav-links li{
-  list-style: none;
-}
-.nav-links li a{
-  color: #f2f2f2;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: 500;
-  padding: 9px 15px;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-.nav-links li a:hover{
-  background: #3A3B3C;
-}
-.nav-links .mobile-item{
-  display: none;
-}
-.nav-links .drop-menu{
-  position: absolute;
-  background: #242526;
-  width: 180px;
-  line-height: 45px;
-  top: 85px;
-  opacity: 0;
-  visibility: hidden;
-  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
-}
-.nav-links li:hover .drop-menu,
-.nav-links li:hover .mega-box{
-  transition: all 0.3s ease;
-  top: 70px;
-  opacity: 1;
-  visibility: visible;
-}
-.drop-menu li a{
-  width: 100%;
-  display: block;
-  padding: 0 0 0 15px;
-  font-weight: 400;
-  border-radius: 0px;
-}
-.mega-box{
-  position: absolute;
-  left: 0;
-  width: 100%;
-  padding: 0 30px;
-  top: 85px;
-  opacity: 0;
-  visibility: hidden;
-}
-.mega-box .content{
-  background: #242526;
-  padding: 25px 20px;
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
-}
-.mega-box .content .row{
-  width: calc(25% - 30px);
-  line-height: 45px;
-}
-.content .row img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.content .row header{
-  color: #f2f2f2;
-  font-size: 20px;
-  font-weight: 500;
-}
-.content .row .mega-links{
-  margin-left: -40px;
-  border-left: 1px solid rgba(255,255,255,0.09);
-}
-.row .mega-links li{
-  padding: 0 20px;
-}
-.row .mega-links li a{
-  padding: 0px;
-  padding: 0 20px;
-  color: #d9d9d9;
-  font-size: 17px;
-  display: block;
-}
-.row .mega-links li a:hover{
-  color: #f2f2f2;
-}
-.wrapper .btn{
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  display: none;
-}
-.wrapper .btn.close-btn{
-  position: absolute;
-  right: 30px;
-  top: 10px;
-}
-
-@media screen and (max-width: 970px) {
-  .wrapper .btn{
-    display: block;
-  }
-  .wrapper .nav-links{
-    position: fixed;
-    height: 100vh;
-    width: 100%;
-    max-width: 350px;
-    top: 0;
-    left: -100%;
-    background: #242526;
-    display: block;
-    padding: 50px 10px;
-    line-height: 50px;
-    overflow-y: auto;
-    box-shadow: 0px 15px 15px rgba(0,0,0,0.18);
-    transition: all 0.3s ease;
-  }
-  /* custom scroll bar */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #242526;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #3A3B3C;
-  }
-  #menu-btn:checked ~ .nav-links{
-    left: 0%;
-  }
-  #menu-btn:checked ~ .btn.menu-btn{
-    display: none;
-  }
-  #close-btn:checked ~ .btn.menu-btn{
-    display: block;
-  }
-  .nav-links li{
-    margin: 15px 10px;
-  }
-  .nav-links li a{
-    padding: 0 20px;
-    display: block;
-    font-size: 20px;
-  }
-  .nav-links .drop-menu{
-    position: static;
-    opacity: 1;
-    top: 65px;
-    visibility: visible;
-    padding-left: 20px;
-    width: 100%;
-    max-height: 0px;
-    overflow: hidden;
-    box-shadow: none;
-    transition: all 0.3s ease;
-  }
-  #showDrop:checked ~ .drop-menu,
-  #showMega:checked ~ .mega-box{
-    max-height: 100%;
-  }
-  .nav-links .desktop-item{
-    display: none;
-  }
-  .nav-links .mobile-item{
-    display: block;
-    color: #f2f2f2;
-    font-size: 20px;
-    font-weight: 500;
-    padding-left: 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-  }
-  .nav-links .mobile-item:hover{
-    background: #3A3B3C;
-  }
-  .drop-menu li{
-    margin: 0;
-  }
-  .drop-menu li a{
-    border-radius: 5px;
-    font-size: 18px;
-  }
-  .mega-box{
-    position: static;
-    top: 65px;
-    opacity: 1;
-    visibility: visible;
-    padding: 0 20px;
-    max-height: 0px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-  .mega-box .content{
-    box-shadow: none;
-    flex-direction: column;
-    padding: 20px 20px 0 20px;
-  }
-  .mega-box .content .row{
-    width: 100%;
-    margin-bottom: 15px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-  }
-  .mega-box .content .row:nth-child(1),
-  .mega-box .content .row:nth-child(2){
-    border-top: 0px;
-  }
-  .content .row .mega-links{
-    border-left: 0px;
-    padding-left: 15px;
-  }
-  .row .mega-links li{
-    margin: 0;
-  }
-  .content .row header{
-    font-size: 19px;
-  }
-}
-nav input{
-  display: none;
-}
-
-.body-text{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  text-align: center;
-  padding: 0 30px;
-}
-.body-text div{
-  font-size: 45px;
-  font-weight: 600;
-}
-
-
-
-
-
-
-</style>
-
-<style>
-
-
-.clear {
-  clear: both;
-}
-img {
-  max-width: 100%;
-  border: 0px;
-}
-ul,
-ol {
-  list-style: none;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-  outline: none;
-  transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
-}
-a:focus,
-a:active,
-a:visited,
-a:hover {
-  text-decoration: none;
-  outline: none;
-}
-a:hover {
-  color: #e73700;
-}
-gl2 {
-  margin-bottom: 48px;
-  padding-bottom: 16px;
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 700;
-  position: relative;
-  text-transform: capitalize;
-}
-h3 {
-  margin: 0 0 10px;
-  font-size: 28px;
-  line-height: 36px;
-}
-button {
-  outline: none !important;
-}
-/******* Common Element CSS End *********/
-
-/* -------- title style ------- */
-.gokul-line {
-  position: relative;
-  width: 400px;
-}
-.gokul-line::before,
-.gokul-line::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  border-radius: 2px;
-}
-.gokul-line::before {
-  width: 100%;
-  background: #f2f2f2;
-}
-.gokul-line::after {
-  width: 32px;
-  background: #e73700;
-}
-
-/******* Mihhhddle section CSS Start ******/
-/* -------- Landing page ------- */
-.game-section {
-  padding: 60px 50px;
-}
-.game-section .owl-stage {
-  margin: 15px 0;
-  display: flex;
-  display: -webkit-flex;
-}
-.game-section .item {
-  margin: 0 15px 60px;
-  width: 320px;
-  height: 400px;
-  display: flex;
-  display: -webkit-flex;
-  align-items: flex-end;
-  -webkit-align-items: flex-end;
-  background: #343434 no-repeat center center / cover;
-  border-radius: 16px;
-  overflow: hidden;
-  position: relative;
-  transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
-  cursor: pointer;
-}
-.game-section .item.active {
-  width: 500px;
-  box-shadow: 12px 40px 40px rgba(0, 0, 0, 0.25);
-  -webkit-box-shadow: 12px 40px 40px rgba(0, 0, 0, 0.25);
-}
-.game-section .item:after {
-  content: "";
-  display: block;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-}
-.game-section .item-desc {
-  padding: 0 24px 12px;
-  color: #fff;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  transform: translateY(calc(100% - 54px));
-  -webkit-transform: translateY(calc(100% - 54px));
-  transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
-}
-.game-section .item.active .item-desc {
-  transform: none;
-  -webkit-transform: none;
-}
-.game-section .item-desc p {
-  opacity: 0;
-  -webkit-transform: translateY(32px);
-  transform: translateY(32px);
-  transition: all 0.4s ease-in-out 0.2s;
-  -webkit-transition: all 0.4s ease-in-out 0.2s;
-}
-.game-section .item.active .item-desc p {
-  opacity: 1;
-  -webkit-transform: translateY(0);
-  transform: translateY(0);
-}
-.game-section .owl-theme.custom-carousel .owl-dots {
-  margin-top: -20px;
-  position: relative;
-  z-index: 5;
-}
-/******** Middle section CSS End *******/
-
-/***** responsive css Start ******/
-
-@media (min-width: 992px) and (max-width: 1199px) {
-  gl2 {
-    margin-bottom: 32px;
-    margin-left: 32px;
-  }
-  h3 {
-    margin: 0 0 8px;
-    font-size: 24px;
-    line-height: 32px;
-  }
-
-  /* -------- Landing page ------- */
-  .game-section {
-    padding: 0px 0px;
-  }
-  .game-section .item {
-    margin: 0 12px 60px;
-    width: 260px;
-    height: 360px;
-  }
-  .game-section .item.active {
-    width: 260px;
-  }
-  .game-section .item-desc {
-    transform: translateY(calc(100% - 46px));
-    -webkit-transform: translateY(calc(100% - 46px));
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  gl2 {
-    margin-bottom: 32px;
-    margin-left: 32px;
-  }
-  h3 {
-    margin: 0 0 8px;
-    font-size: 24px;
-    line-height: 32px;
-  }
-  .gokul-line {
-    width: 330px;
-  }
-
-  /* -------- Landing page ------- */
-  .game-section {
-    padding: 0px 0px 0px;
-  }
-  .game-section .item {
-    margin: 0 12px 60px;
-    width: 240px;
-    height: 330px;
-  }
-  .game-section .item.active {
-    width: 240px;
-  }
-  .game-section .item-desc {
-    transform: translateY(calc(100% - 42px));
-    -webkit-transform: translateY(calc(100% - 42px));
-  }
-}
-
-@media (max-width: 767px) {
-  body {
-    font-size: 14px;
-  }
-  gl2 {
-    margin-bottom: 20px;
-    margin-left: 20px;
-  }
-  h3 {
-    margin: 0 0 8px;
-    font-size: 19px;
-    line-height: 24px;
-  }
-  .line-title {
-    width: 250px;
-  }
-
-  /* -------- Landing page ------- */
-  .game-section {
-    padding: 0px 0px 0px;
-  }
-  .game-section .item {
-    margin: 0 10px 40px;
-    width: 200px;
-    height: 280px;
-  }
-  .game-section .item.active {
-    width: 200px;
-    box-shadow: 6px 10px 10px rgba(0, 0, 0, 0.25);
-    -webkit-box-shadow: 6px 10px 10px rgba(0, 0, 0, 0.25);
-  }
-  .game-section .item-desc {
-    padding: 0 14px 5px;
-    transform: translateY(calc(100% - 42px));
-    -webkit-transform: translateY(calc(100% - 42px));
-  }
-}
-
-
-</style>
-
 </head>
-<body>
-<!-- partial:index.partial.html -->
-<nav>
-  <div class="wrapper">
-    <div class="logo"><a href="#">URBAN WEDS</a></div>
-    <input type="radio" name="slider" id="menu-btn">
-    <input type="radio" name="slider" id="close-btn">
-    <ul class="nav-links">
-      <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-      <li><a href="#">Home</a></li>
-      <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScf78ggSlBlYb13MppE4f1TLf06GE8tjGzgoI9bk6-meW8J4g/viewform?usp=sharing">Add My Service</a></li>
-      <li>
-        <a href="#" class="desktop-item">Dropdown Menus</a>
-        <input type="checkbox" id="showDrop">
-        <label for="showDrop" class="mobile-item">Services</label>
-        <ul class="drop-menu">
-          <li><a href="#">Drop menu 1</a></li>
-          <li><a href="#">Drop menu 2</a></li>
-          <li><a href="#">Drop menu 3</a></li>
-          <li><a href="#">Drop menu 4</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#" class="desktop-item">Mega Menu</a>
-        <input type="checkbox" id="showMega">
-        <label for="showMega" class="mobile-item">Mega Menu</label>
-        <div class="mega-box">
-          <div class="content">
-            <div class="row">
-              <img src="https://fadzrinmadu.github.io/hosted-assets/responsive-mega-menu-and-dropdown-menu-using-only-html-and-css/img.jpg" alt="">
+
+<body class="bg-gray-50">
+
+    <section class="py-16">
+        <div class="max-w-screen-xl mx-auto">
+            <h2 class="text-3xl font-semibold text-center text-gray-800 mb-8">Service Providers</h2>
+
+            <!-- Dynamic Content Section -->
+            <div id="dynamic-lists-container" class="space-y-16">
+                <!-- Dynamic categories will be inserted here -->
             </div>
-            <div class="row">
-              <header>Design Services</header>
-              <ul class="mega-links">
-                <li><a href="#">Graphics</a></li>
-                <li><a href="#">Vectors</a></li>
-                <li><a href="#">Business cards</a></li>
-                <li><a href="#">Custom logo</a></li>
-              </ul>
-            </div>
-            <div class="row">
-              <header>Email Services</header>
-              <ul class="mega-links">
-                <li><a href="#">Personal Email</a></li>
-                <li><a href="#">Business Email</a></li>
-                <li><a href="#">Mobile Email</a></li>
-                <li><a href="#">Web Marketing</a></li>
-              </ul>
-            </div>
-            <div class="row">
-              <header>Security services</header>
-              <ul class="mega-links">
-                <li><a href="#">Site Seal</a></li>
-                <li><a href="#">VPS Hosting</a></li>
-                <li><a href="#">Privacy Seal</a></li>
-                <li><a href="#">Website design</a></li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </li>
-      <li><a href="#">Feedback</a></li>
-    </ul>
-    <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
-  </div>
-</nav>
-  <br><br><br>
-<!-- partial:index.partial.html -->
+    </section>
 
-<div class="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
-  <div class="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl" aria-hidden="true">
-    <div class="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30" style="clip-path: polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)"></div>
-  </div>
-  <div class="absolute left-[max(45rem,calc(50%+8rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl" aria-hidden="true">
-    <div class="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30" style="clip-path: polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)"></div>
-  </div>
-  <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-    <p class="text-sm/6 text-gray-900">
-      <strong class="font-semibold">GeneriCon 2023</strong><svg viewBox="0 0 2 2" class="mx-2 inline size-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>Join us in Denver from June 7 – 9 to see what’s coming next.
-    </p>
-    <a href="#" class="flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">Register now <span aria-hidden="true">&rarr;</span></a>
-  </div>
-  <div class="flex flex-1 justify-end">
-    <button type="button" class="-m-3 p-3 focus-visible:outline-offset-[-4px]">
-      <span class="sr-only">Dismiss</span>
-      <svg class="size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
-      </svg>
-    </button>
-  </div>
-</div>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4c4pU-ui6YYTWTl3usp2_0-RuLkfLYVk",
+            authDomain: "api4home.firebaseapp.com",
+            databaseURL: "https://api4home-default-rtdb.firebaseio.com",
+            projectId: "api4home",
+            storageBucket: "api4home.appspot.com",
+            messagingSenderId: "659636136570",
+            appId: "1:659636136570:web:37a818418505e31ae2e9c3",
+            measurementId: "G-JSDNGYP7YP"
+        };
 
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
+        // Function to Fetch and Show Services by Category
+        function Show(category) {
+            const servicesRef = database.ref('services');
+            const container = document.getElementById('dynamic-lists-container');
 
-<div class="relative w-full max-w-lg mx-auto p-4 bg-white rounded-lg">
-    <!-- Event Imasge -->
-    <img 
-      src="https://via.placeholder.com/1200x150" 
-      alt="Event Banner" 
-      class="w-full h-40 md:h-44 object-cover rounded-lg">
-  </div>
+            // Fetch Services
+            servicesRef.once('value', (snapshot) => {
+                const services = snapshot.val();
+                const filteredServices = Object.values(services).filter(service =>
+                    category === "All" || service.tags.includes(category)
+                );
 
+                // Clear previous list for this category
+                const existingSection = document.getElementById(`section-${category}`);
+                if (existingSection) existingSection.remove();
 
+                // Create new section
+                const section = document.createElement('div');
+                section.id = `section-${category}`;
+                section.innerHTML = `
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">${category} Services</h3>
+                    <div class="overflow-x-auto pb-4">
+                        <div class="flex space-x-6 px-6" id="list-${category}">
+                            <!-- Cards will be dynamically generated here -->
+                        </div>
+                    </div>
+                `;
 
+                container.appendChild(section);
 
-<section class="game-section">
-  <h2 class="text-2xl font-bold text-center mb-5">Trending Now</h2>
-  <div class="owl-carousel custom-carousel owl-theme">
-    <!-- Carousel items will be dynamically added here -->
-  </div>
-</section>
+                // Populate Cards
+                const list = document.getElementById(`list-${category}`);
+                filteredServices.forEach(service => {
+                    const card = document.createElement('div');
+                    card.classList.add(
+                        'flex-shrink-0', 'w-64', 'bg-white', 'shadow-lg', 'rounded-lg', 'overflow-hidden',
+                        'transform', 'transition-transform', 'duration-200', 'hover:scale-105', 'hover:shadow-xl'
+                    );
 
-<script>
-  // Firebase Configuration
-  const firebaseConfig = {
-  apiKey: "AIzaSyCZL_PB0cQxVquwdxl-xeRWgtke3wl24TA",
-  authDomain: "urbanweds-87457.firebaseapp.com",
-  projectId: "urbanweds-87457",
-  storageBucket: "urbanweds-87457.firebasestorage.app",
-  messagingSenderId: "653498502188",
-  appId: "1:653498502188:web:16ef4d25e9c6665fe29589",
-  measurementId: "G-DS4029MMMZ"
-};
+                    // Attach click handler to redirect to service URL
+                    card.addEventListener('click', () => {
+                        window.location.href = service.url; // Assuming the URL is stored in Firebase
+                    });
 
-  // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
+                    card.innerHTML = `
+                        <img class="w-full h-48 object-cover" src="${service.image}" alt="${service.name}">
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold text-gray-800">${service.name}</h3>
+                            <p class="text-sm text-gray-600 opacity-80 mt-2">${service.description}</p>
+                            <div class="flex items-center text-gray-600 mt-2 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 8c0 2.34 1.21 4.42 3.01 5.72L12 22l3.99-8.28C17.79 12.42 19 10.34 19 8c0-2.87-3.13-6-7-6z"/>
+                                </svg>
+                                <span>${service.location}</span>
+                            </div>
+                            <div class="flex items-center mt-2">
+                                <div class="flex items-center text-yellow-500">
+                                    ${getRatingStars(service.rating)}
+                                </div>
+                                <span class="ml-2 text-gray-600">${service.rating} (${service.ratingCount} ratings)</span>
+                            </div>
+                            <div class="flex flex-wrap mt-2">
+                                ${service.tags.map(tag => `<span class="text-xs bg-gray-300 text-gray-800 px-2 py-1 rounded-full mr-2 mb-2">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            });
+        }
 
-  // Reference to the database
-  const carouselRef = database.ref("carousel-items");
+        // Render Stars
+        function getRatingStars(rating) {
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                stars += i < rating
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24" stroke="none"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`
+                    : `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+            }
+            return stars;
+        }
 
-  // Fetch data and populate the carousel
-  carouselRef.on("value", (snapshot) => {
-    const data = snapshot.val();
-    const carouselContainer = $(".custom-carousel");
+        // Example Usage
+        window.onload = () => {
+            // First category: Photography
+            Show("Photography");
 
-    carouselContainer.empty(); // Clear existing items
+            // Second category: Beauty
+            Show("Beauty");
 
-    if (data) {
-      Object.keys(data).forEach((key) => {
-        const item = data[key];
-        const carouselItem = `
-          <div class="item">
-            <img src="${item.image}" alt="${item.title}">
-            <div class="item-desc">
-              <h3>${item.title}</h3>
-              <p>${item.description}</p>
-            </div>
-          </div>`;
-        carouselContainer.append(carouselItem);
-      });
+            // Add more categories if needed
+            // Show("Catering");
+        };
+    </script>
+</body>
 
-      // Initialize or refresh Owl Carousel
-      carouselContainer.owlCarousel("destroy"); // Destroy any existing instance
-      carouselContainer.owlCarousel({
-        autoWidth: true,
-        loop: true,
-      });
-    } else {
-      carouselContainer.append("<p>No items found.</p>");
-    }
-  });
-</script>
-
-
-<br>
-<gl2 class="gokul-line">Available Brands</gl2>
-<br><br><br>
-
-
-
-<!-- component -->
-
-  <a href="https://example.com" class="block w-full md:w-3/4">
-    <div
-      class="relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-3 border border-white bg-white hover:shadow-xl transition-shadow duration-300">
-      <div class="w-full md:w-1/3 bg-white grid place-items-center">
-        <img src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-          alt="tailwind logo" class="rounded-xl h-[250px] w-full object-cover" />
-      </div>
-      <div class="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
-        <div class="flex justify-between item-center">
-          <p class="text-gray-500 font-medium hidden md:block">Vacations</p>
-          <div class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <p class="text-gray-600 font-bold text-sm ml-1">
-              4.96
-              <span class="text-gray-500 font-normal">(76 reviews)</span>
-            </p>
-          </div>
-          <div class="">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                clip-rule="evenodd" />
-            </
+</html>
