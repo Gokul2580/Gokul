@@ -10,22 +10,16 @@
 </head>
 <body class="bg-gray-50">
 
-    <section class="game-section">
-        <gl2 class="gokul-line">Trending Now</gl2>
-        <script>
-            show("Beauty");  // Call show() dynamically for the "Beauty" category
-        </script>
+    <section class="game-section" id="beauty-section">
+        <gl2 class="gokul-line">Beauty Services</gl2>
     </section>
 
-    <section class="game-section">
+    <section class="game-section" id="photography-section">
         <gl2 class="gokul-line">Photography Services</gl2>
-        <script>
-            show("Photography");  // Call show() dynamically for the "Photography" category
-        </script>
     </section>
 
     <section id="dynamic-content">
-        <!-- The dynamic content for Beauty and Photography will be inserted here -->
+        <!-- Dynamic content will be inserted here -->
     </section>
 
     <script>
@@ -49,6 +43,9 @@
         function show(category) {
             const servicesRef = database.ref('services');
             const container = document.getElementById('dynamic-content');
+            
+            // Clear previous content
+            container.innerHTML = '';
 
             // Fetch Services
             servicesRef.once('value', (snapshot) => {
@@ -57,13 +54,9 @@
                     category === "All" || service.tags.includes(category)
                 );
 
-                // Clear previous list for this category
-                const existingSection = document.getElementById(`section-${category}`);
-                if (existingSection) existingSection.remove();
-
-                // Create new section for the services
+                // Create section for the category
                 const section = document.createElement('div');
-                section.id = `section-${category}`;
+                section.classList.add('mb-10');
                 section.innerHTML = `
                     <h3 class="text-2xl font-semibold mb-4">${category} Services</h3>
                     <div class="overflow-x-auto pb-4">
@@ -72,7 +65,6 @@
                         </div>
                     </div>
                 `;
-
                 container.appendChild(section);
 
                 // Populate Cards
@@ -121,6 +113,12 @@
             }
             return stars;
         }
+
+        // Fetch categories on page load
+        window.onload = function() {
+            show("Beauty");
+            show("Photography");
+        };
     </script>
 </body>
 </html>
