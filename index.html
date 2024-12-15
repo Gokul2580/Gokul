@@ -1,167 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page with Features</title>
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Mega Menu with Firebase</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Bootstrap (if needed) -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+
+  <!-- Owl Carousel -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css'>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
+
+  <style>
+    .owl-carousel .item {
+      background: #4a90e2;
+      padding: 30px;
+      margin: 10px;
+      color: white;
+      border-radius: 3px;
+      text-align: center;
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
 
-    <!-- Profile Toolbar -->
-    <div class="bg-white shadow-md p-4 flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-            <button class="text-gray-600" onclick="history.back()">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5"></path>
-                </svg>
-            </button>
-            <span class="text-xl font-semibold text-gray-800">User Profile</span>
-        </div>
+<body>
+  <!-- Navigation -->
+  <nav class="bg-gray-900 text-white p-4">
+    <div class="container mx-auto">
+      <h1 class="text-xl font-bold">Dynamic Owl Carousel with Firebase</h1>
     </div>
+  </nav>
 
-    <!-- Profile Info Section -->
-    <div class="bg-white shadow-md p-6 mx-auto max-w-3xl mt-6 rounded-lg">
-        <div class="flex justify-center">
-            <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Image" class="w-32 h-32 rounded-full object-cover">
-        </div>
-
-        <div class="text-center mt-4">
-            <div class="flex items-center justify-center">
-                <h2 id="userName" class="text-2xl font-semibold text-gray-800">John Doe</h2>
-                <span id="verifiedTick" class="ml-2 text-blue-500 hidden">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                </span>
-            </div>
-            <p id="userDescription" class="text-gray-600 mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-
-        <!-- Tabs -->
-        <div class="mt-6">
-            <div class="flex border-b">
-                <button id="servicesTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500">
-                    Services
-                </button>
-                <button id="reviewsTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500">
-                    Reviews
-                </button>
-                <button id="timelineTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500">
-                    Timeline
-                </button>
-            </div>
-
-            <div id="tabContent" class="mt-4">
-                <!-- Services Content -->
-                <div id="servicesContent" class="hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="servicesList"></div>
-                </div>
-                <!-- Reviews Content -->
-                <div id="reviewsContent" class="hidden">
-                    <div class="space-y-4" id="reviewsList"></div>
-                </div>
-                <!-- Timeline Content -->
-                <div id="timelineContent" class="hidden">
-                    <div class="relative border-l-2 border-gray-300">
-                        <div class="mb-8 ml-6">
-                            <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2.5 top-1.5"></div>
-                            <p class="text-sm text-gray-500">February 2022</p>
-                            <h4 class="text-lg font-bold text-gray-800 mt-1">Application UI code in Tailwind CSS</h4>
-                            <p class="text-gray-600 mt-1">Get access to over 20+ pages including dashboard layouts, charts, and more.</p>
-                        </div>
-                        <div class="mb-8 ml-6">
-                            <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2.5 top-1.5"></div>
-                            <p class="text-sm text-gray-500">March 2022</p>
-                            <h4 class="text-lg font-bold text-gray-800 mt-1">Marketing UI design in Figma</h4>
-                            <p class="text-gray-600 mt-1">All pages and components are first designed in Figma.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Owl Carousel Section -->
+  <section class="my-8">
+    <div class="container mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Trending Now</h2>
+      <div class="owl-carousel owl-theme" id="carousel-container">
+        <!-- Items will be populated dynamically -->
+      </div>
     </div>
+  </section>
 
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCZL_PB0cQxVquwdxl-xeRWgtke3wl24TA",
-            authDomain: "urbanweds-87457.firebaseapp.com",
-            projectId: "urbanweds-87457",
-            storageBucket: "urbanweds-87457.firebasestorage.app",
-            messagingSenderId: "653498502188",
-            appId: "1:653498502188:web:16ef4d25e9c6665fe29589"
-        };
+  <!-- Tailwind List Section -->
+  <section class="my-8">
+    <div class="container mx-auto">
+      <h2 class="text-2xl font-bold mb-4">Available Brands</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" id="list-container">
+        <!-- Items will be populated dynamically -->
+      </div>
+    </div>
+  </section>
 
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+  <!-- Firebase Configuration -->
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id');
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-        if (userId) {
-            // Fetch User Data
-            database.ref('users/' + userId).once('value').then(snapshot => {
-                const userData = snapshot.val();
-                if (userData) {
-                    document.getElementById('userName').textContent = userData.name || 'No Name';
-                    document.getElementById('userDescription').textContent = userData.description || 'No Description';
-                    document.getElementById('profileImage').src = userData.profileImage || 'https://via.placeholder.com/150';
-                    if (userData.isVerified) {
-                        document.getElementById('verifiedTick').classList.remove('hidden');
-                    }
-                }
-            });
+    // Fetch data for Owl Carousel
+    const carouselContainer = document.getElementById('carousel-container');
+    firebase.database().ref('carouselItems').on('value', (snapshot) => {
+      carouselContainer.innerHTML = ''; // Clear existing items
+      snapshot.forEach((childSnapshot) => {
+        const itemData = childSnapshot.val();
+        const carouselItem = document.createElement('div');
+        carouselItem.className = 'item';
+        carouselItem.style.backgroundImage = `url(${itemData.imageURL})`;
+        carouselItem.innerHTML = `
+          <h3>${itemData.title}</h3>
+          <p>${itemData.description}</p>
+        `;
+        carouselContainer.appendChild(carouselItem);
+      });
 
-            // Fetch Services
-            database.ref('services').orderByChild('userId').equalTo(userId).once('value').then(snapshot => {
-                const servicesList = document.getElementById('servicesList');
-                snapshot.forEach(service => {
-                    const serviceData = service.val();
-                    servicesList.innerHTML += `
-                        <div class="bg-white shadow-md rounded-lg p-4">
-                            <h3 class="text-lg font-semibold text-gray-800">${serviceData.name}</h3>
-                            <p class="text-gray-600">${serviceData.description}</p>
-                        </div>
-                    `;
-                });
-            });
+      // Initialize Owl Carousel
+      $('.owl-carousel').owlCarousel({
+        autoWidth: true,
+        loop: true,
+        margin: 10
+      });
+    });
 
-            // Fetch Reviews
-            database.ref('reviews').orderByChild('userId').equalTo(userId).once('value').then(snapshot => {
-                const reviewsList = document.getElementById('reviewsList');
-                snapshot.forEach(review => {
-                    const reviewData = review.val();
-                    reviewsList.innerHTML += `
-                        <div class="bg-white p-4 shadow-md rounded-lg">
-                            <p class="text-gray-600">"${reviewData.text}"</p>
-                        </div>
-                    `;
-                });
-            });
-        }
+    // Fetch data for Tailwind List
+    const listContainer = document.getElementById('list-container');
+    firebase.database().ref('listItems').on('value', (snapshot) => {
+      listContainer.innerHTML = ''; // Clear existing items
+      snapshot.forEach((childSnapshot) => {
+        const itemData = childSnapshot.val();
+        const listItem = document.createElement('div');
+        listItem.className = 'p-4 border rounded-lg shadow bg-white';
+        listItem.innerHTML = `
+          <h3 class="text-xl font-bold">${itemData.name}</h3>
+          <p class="text-gray-700">${itemData.description}</p>
+          <p class="text-sm text-gray-500">${itemData.location}</p>
+        `;
+        listContainer.appendChild(listItem);
+      });
+    });
+  </script>
 
-        // Tabs Functionality
-        const tabs = {
-            servicesTab: 'servicesContent',
-            reviewsTab: 'reviewsContent',
-            timelineTab: 'timelineContent'
-        };
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-        Object.keys(tabs).forEach(tabId => {
-            document.getElementById(tabId).onclick = () => {
-                Object.keys(tabs).forEach(hideTab => {
-                    document.getElementById(tabs[hideTab]).classList.add('hidden');
-                });
-                document.getElementById(tabs[tabId]).classList.remove('hidden');
-            };
-        });
-
-        document.getElementById('servicesTab').click();
-    </script>
+  <!-- Owl Carousel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 </body>
+
 </html>
