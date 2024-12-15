@@ -1,31 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Categories</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
+
 <body class="bg-gray-50">
 
-    <section class="game-section">
-        <gl2 class="gokul-line">Trending Now</gl2>
-        <script>
-            show("Beauty");  // Call show() dynamically for the "Beauty" category
-        </script>
-    </section>
-
-    <section class="game-section">
-        <gl2 class="gokul-line">Photography Services</gl2>
-        <script>
-            show("Photography");  // Call show() dynamically for the "Photography" category
-        </script>
-    </section>
-
-    <section id="dynamic-content">
-        <!-- The dynamic content for Beauty and Photography will be inserted here -->
+    <section class="py-16">
+        <div class="max-w-screen-xl mx-auto">
+            <!-- Dynamic Content Section -->
+            <div id="dynamic-lists-container" class="space-y-16">
+                <!-- Dynamic categories will be inserted here -->
+            </div>
+        </div>
     </section>
 
     <script>
@@ -46,9 +40,9 @@
         const database = firebase.database();
 
         // Function to Fetch and Show Services by Category
-        function show(category) {
+        function Show(category) {
             const servicesRef = database.ref('services');
-            const container = document.getElementById('dynamic-content');
+            const container = document.getElementById('dynamic-lists-container');
 
             // Fetch Services
             servicesRef.once('value', (snapshot) => {
@@ -65,7 +59,6 @@
                 const section = document.createElement('div');
                 section.id = `section-${category}`;
                 section.innerHTML = `
-                    <h3 class="text-2xl font-semibold mb-4">${category} Services</h3>
                     <div class="overflow-x-auto pb-4">
                         <div class="flex space-x-6 px-6" id="list-${category}">
                             <!-- Cards will be dynamically generated here -->
@@ -83,6 +76,11 @@
                         'flex-shrink-0', 'w-64', 'bg-white', 'shadow-lg', 'rounded-lg', 'overflow-hidden',
                         'transform', 'transition-transform', 'duration-200', 'hover:scale-105', 'hover:shadow-xl'
                     );
+
+                    // Attach click handler to redirect to service URL
+                    card.addEventListener('click', () => {
+                        window.location.href = service.url; // Assuming the URL is stored in Firebase
+                    });
 
                     card.innerHTML = `
                         <img class="w-full h-48 object-cover" src="${service.image}" alt="${service.name}">
@@ -121,6 +119,19 @@
             }
             return stars;
         }
+
+        // Example Usage
+        window.onload = () => {
+            // First category: Photography
+            Show("Photography");
+
+            // Second category: Beauty
+            Show("Beauty");
+
+            // Add more categories if needed
+            // Show("Catering");
+        };
     </script>
 </body>
+
 </html>
