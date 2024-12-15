@@ -12,15 +12,13 @@
 <body class="bg-gray-50">
 
     <section class="game-section" id="beauty-section">
-        <gl2 class="gokul-line">Beauty Services</gl2>
+        <h2 class="gokul-line">Beauty Services</h2>
+        <!-- This section will hold the dynamic content -->
     </section>
 
     <section class="game-section" id="photography-section">
-        <gl2 class="gokul-line">Photography Services</gl2>
-    </section>
-
-    <section id="dynamic-content">
-        <!-- Dynamic content will be inserted here -->
+        <h2 class="gokul-line">Photography Services</h2>
+        <!-- This section will hold the dynamic content -->
     </section>
 
     <script>
@@ -43,7 +41,7 @@
         // Function to Fetch and Show Services by Category
         function show(category) {
             const servicesRef = database.ref('services');
-            const container = document.getElementById('dynamic-content');
+            const container = document.getElementById(`${category}-section`);
             
             // Clear previous content
             container.innerHTML = '';
@@ -115,11 +113,12 @@
             return stars;
         }
 
-        // Fetch categories on page load
+        // Call the show function directly inside the script to show services for "Beauty"
         window.onload = function() {
-            show("Beauty");
-            show("Photography");
+            show("Beauty"); // Load Beauty Services
+            show("Photography"); // Load Photography Services
         };
     </script>
+
 </body>
 </html>
