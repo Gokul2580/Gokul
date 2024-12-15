@@ -694,7 +694,7 @@ const firebaseConfig = {
     const games = snapshot.docs.map(doc => doc.data());
 
     // Get the carousel container
-    const carousel = document.querySelector('.owl-carousel');
+    const carousel = document.querySelector('.owl-carousel owl-carousel custom-carousel owl-theme');
     carousel.innerHTML = '';  // Clear any existing items
 
     // Loop through games data and create carousel items
