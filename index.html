@@ -685,44 +685,48 @@ const firebaseConfig = {
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        const db = firebase.database();
         
   // Fetch data from Firebase Firestore
   const getGames = async () => {
-    const gamesRef = db.collection('games');
-    const snapshot = await gamesRef.get();
-    const games = snapshot.docs.map(doc => doc.data());
+  const gamesRef = db.collection('games');
+  const snapshot = await gamesRef.get();
+  const games = snapshot.docs.map(doc => doc.data());
 
-    // Get the carousel container
-    const carousel = document.querySelector('.owl-carousel owl-carousel custom-carousel owl-theme');
-    carousel.innerHTML = '';  // Clear any existing items
+  // Use alert to display the fetched data
+  alert(JSON.stringify(games, null, 2));  // Will show the data in a formatted way
 
-    // Loop through games data and create carousel items
-    games.forEach(game => {
-      const itemHTML = `
-        <div class="item" style="background-image: url(${game.imageUrl});">
-          <div class="item-desc">
-            <h3>${game.name}</h3>
-            <p>${game.description}</p>
-          </div>
+  // Get the carousel container
+  const carousel = document.querySelector('.owl-carousel');
+  carousel.innerHTML = '';  // Clear any existing items
+
+  // Loop through the games data and create carousel items
+  games.forEach(game => {
+    const itemHTML = `
+      <div class="item" style="background-image: url(${game.imageUrl});">
+        <div class="item-desc">
+          <h3>${game.name}</h3>
+          <p>${game.description}</p>
         </div>
-      `;
-      carousel.innerHTML += itemHTML;
-    });
+      </div>
+    `;
+    carousel.innerHTML += itemHTML;
+  });
 
-    // Initialize Owl Carousel after adding the items
-    $(".owl-carousel").owlCarousel({
-      items: 1,
-      loop: true,
-      autoplay: true,
-      autoplayTimeout: 5000,
-      dots: true,
-      nav: true
-    });
-  };
+  // Initialize Owl Carousel after adding the items
+  $(".owl-carousel").owlCarousel({
+    items: 1,
+    loop: true,
+    autoplay: true,
+    autoplayTimeout: 5000,
+    dots: true,
+    nav: true
+  });
+};
 
-  // Call the function to load games data
-  getGames();
+// Call the function to load games data
+getGames();
+
 </script>
 
 <br>
