@@ -3,21 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
+    <title>Profile Page with Features</title>
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
-
-    <style>
-        /* TailwindCSS for dark mode and customization */
-        .verified {
-            color: #3b82f6;
-        }
-    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body class="bg-gray-100">
 
@@ -25,65 +16,70 @@
     <div class="bg-white shadow-md p-4 flex items-center justify-between">
         <div class="flex items-center space-x-2">
             <button class="text-gray-600" onclick="history.back()">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5"></path>
                 </svg>
             </button>
             <span class="text-xl font-semibold text-gray-800">User Profile</span>
         </div>
-        <button class="text-gray-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2h-5v2zM17 12h5v-2h-5v2zM17 4h5V2h-5v2zM2 4h5V2H2v2zm0 8h5v-2H2v2zm0 8h5v-2H2v2z"></path>
-            </svg>
-        </button>
     </div>
 
     <!-- Profile Info Section -->
     <div class="bg-white shadow-md p-6 mx-auto max-w-3xl mt-6 rounded-lg">
         <div class="flex justify-center">
-            <!-- Profile Image -->
-            <div class="relative">
-                <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Image" class="w-32 h-32 rounded-full object-cover">
-            </div>
+            <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Image" class="w-32 h-32 rounded-full object-cover">
         </div>
 
         <div class="text-center mt-4">
-            <!-- User Name with Verified Check -->
             <div class="flex items-center justify-center">
                 <h2 id="userName" class="text-2xl font-semibold text-gray-800">John Doe</h2>
                 <span id="verifiedTick" class="ml-2 text-blue-500 hidden">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </span>
             </div>
-            <p id="userDescription" class="text-gray-600 mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor.</p>
+            <p id="userDescription" class="text-gray-600 mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </div>
 
-        <!-- Tab Navigation -->
+        <!-- Tabs -->
         <div class="mt-6">
             <div class="flex border-b">
-                <button id="servicesTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="servicesTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500">
                     Services
                 </button>
-                <button id="reviewsTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="reviewsTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500">
                     Reviews
                 </button>
+                <button id="timelineTab" class="px-4 py-2 text-lg font-semibold text-gray-700 border-b-2 border-transparent hover:text-blue-500">
+                    Timeline
+                </button>
             </div>
-            
-            <!-- Tab Content -->
-            <div id="tabContent" class="mt-4">
-                <!-- Services Tab Content -->
-                <div id="servicesContent" class="hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="servicesList">
-                        <!-- Service list will be populated here -->
-                    </div>
-                </div>
 
-                <!-- Reviews Tab Content -->
+            <div id="tabContent" class="mt-4">
+                <!-- Services Content -->
+                <div id="servicesContent" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="servicesList"></div>
+                </div>
+                <!-- Reviews Content -->
                 <div id="reviewsContent" class="hidden">
-                    <div class="space-y-4" id="reviewsList">
-                        <!-- Reviews list will be populated here -->
+                    <div class="space-y-4" id="reviewsList"></div>
+                </div>
+                <!-- Timeline Content -->
+                <div id="timelineContent" class="hidden">
+                    <div class="relative border-l-2 border-gray-300">
+                        <div class="mb-8 ml-6">
+                            <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2.5 top-1.5"></div>
+                            <p class="text-sm text-gray-500">February 2022</p>
+                            <h4 class="text-lg font-bold text-gray-800 mt-1">Application UI code in Tailwind CSS</h4>
+                            <p class="text-gray-600 mt-1">Get access to over 20+ pages including dashboard layouts, charts, and more.</p>
+                        </div>
+                        <div class="mb-8 ml-6">
+                            <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2.5 top-1.5"></div>
+                            <p class="text-sm text-gray-500">March 2022</p>
+                            <h4 class="text-lg font-bold text-gray-800 mt-1">Marketing UI design in Figma</h4>
+                            <p class="text-gray-600 mt-1">All pages and components are first designed in Figma.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,107 +87,81 @@
     </div>
 
     <script>
-        // Firebase configuration (replace with your actual config)
+        // Firebase Configuration
         const firebaseConfig = {
-  apiKey: "AIzaSyCZL_PB0cQxVquwdxl-xeRWgtke3wl24TA",
-  authDomain: "urbanweds-87457.firebaseapp.com",
-  projectId: "urbanweds-87457",
-  storageBucket: "urbanweds-87457.firebasestorage.app",
-  messagingSenderId: "653498502188",
-  appId: "1:653498502188:web:16ef4d25e9c6665fe29589",
-  measurementId: "G-DS4029MMMZ"
-};
+            apiKey: "AIzaSyCZL_PB0cQxVquwdxl-xeRWgtke3wl24TA",
+            authDomain: "urbanweds-87457.firebaseapp.com",
+            projectId: "urbanweds-87457",
+            storageBucket: "urbanweds-87457.firebasestorage.app",
+            messagingSenderId: "653498502188",
+            appId: "1:653498502188:web:16ef4d25e9c6665fe29589"
+        };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Get the user ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id');  // Example: www.example.com/profile?id=1789
+        const userId = urlParams.get('id');
 
         if (userId) {
-            // Fetch user data from Firebase Realtime Database
+            // Fetch User Data
             database.ref('users/' + userId).once('value').then(snapshot => {
                 const userData = snapshot.val();
-
                 if (userData) {
-                    // Populate profile details
                     document.getElementById('userName').textContent = userData.name || 'No Name';
                     document.getElementById('userDescription').textContent = userData.description || 'No Description';
                     document.getElementById('profileImage').src = userData.profileImage || 'https://via.placeholder.com/150';
-
-                    // Show verified tick if the user is verified
                     if (userData.isVerified) {
                         document.getElementById('verifiedTick').classList.remove('hidden');
                     }
-
-                    // Fetch and display services for the user
-                    database.ref('services').orderByChild('userId').equalTo(userId).once('value').then(serviceSnapshot => {
-                        const servicesList = document.getElementById('servicesList');
-                        servicesList.innerHTML = '';  // Clear any previous services
-                        
-                        serviceSnapshot.forEach(serviceChild => {
-                            const serviceData = serviceChild.val();
-                            const serviceItem = document.createElement('div');
-                            serviceItem.classList.add('bg-white', 'shadow-md', 'rounded-lg', 'p-4');
-                            serviceItem.innerHTML = `
-                                <h3 class="text-xl font-semibold text-gray-800">${serviceData.name}</h3>
-                                <p class="text-gray-600 mt-2">${serviceData.description}</p>
-                                <button class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
-                                    Book Now
-                                </button>
-                            `;
-                            servicesList.appendChild(serviceItem);
-                        });
-                    });
-
-                    // Fetch and display reviews for the user
-                    database.ref('reviews').orderByChild('userId').equalTo(userId).once('value').then(reviewSnapshot => {
-                        const reviewsList = document.getElementById('reviewsList');
-                        reviewsList.innerHTML = '';  // Clear any previous reviews
-                        
-                        reviewSnapshot.forEach(reviewChild => {
-                            const reviewData = reviewChild.val();
-                            const reviewItem = document.createElement('div');
-                            reviewItem.classList.add('bg-white', 'shadow-md', 'rounded-lg', 'p-4');
-                            reviewItem.innerHTML = `
-                                <p class="text-gray-600">"${reviewData.text}"</p>
-                                <span class="text-yellow-500">?????</span>
-                            `;
-                            reviewsList.appendChild(reviewItem);
-                        });
-                    });
-                } else {
-                    alert('User data not found.');
                 }
-            }).catch(error => {
-                console.error("Error fetching user data: ", error);
+            });
+
+            // Fetch Services
+            database.ref('services').orderByChild('userId').equalTo(userId).once('value').then(snapshot => {
+                const servicesList = document.getElementById('servicesList');
+                snapshot.forEach(service => {
+                    const serviceData = service.val();
+                    servicesList.innerHTML += `
+                        <div class="bg-white shadow-md rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-gray-800">${serviceData.name}</h3>
+                            <p class="text-gray-600">${serviceData.description}</p>
+                        </div>
+                    `;
+                });
+            });
+
+            // Fetch Reviews
+            database.ref('reviews').orderByChild('userId').equalTo(userId).once('value').then(snapshot => {
+                const reviewsList = document.getElementById('reviewsList');
+                snapshot.forEach(review => {
+                    const reviewData = review.val();
+                    reviewsList.innerHTML += `
+                        <div class="bg-white p-4 shadow-md rounded-lg">
+                            <p class="text-gray-600">"${reviewData.text}"</p>
+                        </div>
+                    `;
+                });
             });
         }
 
-        // JavaScript to handle tab switching
-        const servicesTab = document.getElementById('servicesTab');
-        const reviewsTab = document.getElementById('reviewsTab');
-        const servicesContent = document.getElementById('servicesContent');
-        const reviewsContent = document.getElementById('reviewsContent');
+        // Tabs Functionality
+        const tabs = {
+            servicesTab: 'servicesContent',
+            reviewsTab: 'reviewsContent',
+            timelineTab: 'timelineContent'
+        };
 
-        servicesTab.addEventListener('click', () => {
-            servicesContent.classList.remove('hidden');
-            reviewsContent.classList.add('hidden');
-            servicesTab.classList.add('border-blue-500', 'text-blue-500');
-            reviewsTab.classList.remove('border-blue-500', 'text-blue-500');
+        Object.keys(tabs).forEach(tabId => {
+            document.getElementById(tabId).onclick = () => {
+                Object.keys(tabs).forEach(hideTab => {
+                    document.getElementById(tabs[hideTab]).classList.add('hidden');
+                });
+                document.getElementById(tabs[tabId]).classList.remove('hidden');
+            };
         });
 
-        reviewsTab.addEventListener('click', () => {
-            reviewsContent.classList.remove('hidden');
-            servicesContent.classList.add('hidden');
-            reviewsTab.classList.add('border-blue-500', 'text-blue-500');
-            servicesTab.classList.remove('border-blue-500', 'text-blue-500');
-        });
-
-        // Default tab on load (Services)
-        servicesTab.click();
+        document.getElementById('servicesTab').click();
     </script>
 </body>
 </html>
