@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body class="bg-gray-50">
+
+    <section class="game-section" id="beauty-section">
+        <gl2 class="gokul-line">Beauty Services</gl2>
+    </section>
+
+    <section class="game-section" id="photography-section">
+        <gl2 class="gokul-line">Photography Services</gl2>
+    </section>
+
+    <section id="dynamic-content">
+        <!-- Dynamic content will be inserted here -->
+    </section>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4c4pU-ui6YYTWTl3usp2_0-RuLkfLYVk",
+            authDomain: "api4home.firebaseapp.com",
+            databaseURL: "https://api4home-default-rtdb.firebaseio.com",
+            projectId: "api4home",
+            storageBucket: "api4home.appspot.com",
+            messagingSenderId: "659636136570",
+            appId: "1:659636136570:web:37a818418505e31ae2e9c3",
+            measurementId: "G-JSDNGYP7YP"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Function to Fetch and Show Services by Category
+        function show(category) {
+            const servicesRef = database.ref('services');
+            const container = document.getElementById('dynamic-content');
+            
+            // Clear previous content
+            container.innerHTML = '';
+
+            // Fetch Services
+            servicesRef.once('value', (snapshot) => {
+                const services = snapshot.val();
+                const filteredServices = Object.values(services).filter(service =>
+                    category === "All" || service.tags.includes(category)
+                );
+
+                // Create section for the category
+                const section = document.createElement('div');
+                section.classList.add('mb-10');
+                section.innerHTML = `
+                    <h3 class="text-2xl font-semibold mb-4">${category} Services</h3>
+                    <div class="overflow-x-auto pb-4">
+                        <div class="flex space-x-6 px-6" id="list-${category}">
+                            <!-- Cards will be dynamically generated here -->
+                        </div>
+                    </div>
+                `;
+                container.appendChild(section);
+
+                // Populate Cards
+                const list = document.getElementById(`list-${category}`);
+                filteredServices.forEach(service => {
+                    const card = document.createElement('div');
+                    card.classList.add(
+                        'flex-shrink-0', 'w-64', 'bg-white', 'shadow-lg', 'rounded-lg', 'overflow-hidden',
+                        'transform', 'transition-transform', 'duration-200', 'hover:scale-105', 'hover:shadow-xl'
+                    );
+
+                    card.innerHTML = `
+                        <img class="w-full h-48 object-cover" src="${service.image}" alt="${service.name}">
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold text-gray-800">${service.name}</h3>
+                            <p class="text-sm text-gray-600 opacity-80 mt-2">${service.description}</p>
+                            <div class="flex items-center text-gray-600 mt-2 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 8c0 2.34 1.21 4.42 3.01 5.72L12 22l3.99-8.28C17.79 12.42 19 10.34 19 8c0-2.87-3.13-6-7-6z"/>
+                                </svg>
+                                <span>${service.location}</span>
+                            </div>
+                            <div class="flex items-center mt-2">
+                                <div class="flex items-center text-yellow-500">
+                                    ${getRatingStars(service.rating)}
+                                </div>
+                                <span class="ml-2 text-gray-600">${service.rating} (${service.ratingCount} ratings)</span>
+                            </div>
+                            <div class="flex flex-wrap mt-2">
+                                ${service.tags.map(tag => `<span class="text-xs bg-gray-300 text-gray-800 px-2 py-1 rounded-full mr-2 mb-2">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            });
+        }
+
+        // Render Stars
+        function getRatingStars(rating) {
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                stars += i < rating
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24" stroke="none"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`
+                    : `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+            }
+            return stars;
+        }
+
+        // Fetch categories on page load
+        window.onload = function() {
+            show("Beauty");
+            show("Photography");
+        };
+    </script>
+</body>
+</html>
