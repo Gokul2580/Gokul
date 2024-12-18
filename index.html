@@ -3,117 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Mehendi Design Generator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>AI Model Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7fafc;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      color: #2d3748;
+    }
+    .btn {
+      background-color: #48bb78;
+      color: #ffffff;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+      width: 100%;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #38a169;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body>
+  <div class="container">
+    <h1>AI Model Generator</h1>
+    <p class="text-center">This demo shows how to create, train, and export a simple model in the browser using TensorFlow.js. Click the button below to train and save the model.</p>
+    
+    <!-- Button to trigger model creation and saving -->
+    <button id="generateButton" class="btn">Train and Save Model</button>
 
-  <!-- Header -->
-  <header class="bg-green-500 text-white p-6">
-    <h1 class="text-3xl font-bold text-center">AI Mehendi Design Generator</h1>
-  </header>
-
-  <!-- Main Content -->
-  <main class="max-w-5xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg space-y-6">
-    <!-- Customization Section -->
-    <div class="space-y-4">
-      <h2 class="text-xl font-semibold">Customize Your Mehendi Design</h2>
-
-      <!-- Style Selection -->
-      <div>
-        <label for="style" class="block text-sm font-medium text-gray-700">Select Design Style</label>
-        <select id="style" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
-          <option value="arabic">Arabic</option>
-          <option value="bridal">Bridal</option>
-          <option value="floral">Floral</option>
-          <option value="modern">Modern</option>
-        </select>
-      </div>
-
-      <!-- Length Selection -->
-      <div>
-        <label for="length" class="block text-sm font-medium text-gray-700">Select Design Length</label>
-        <select id="length" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
-          <option value="hand">Hand Only</option>
-          <option value="elbow">Hand to Elbow</option>
-          <option value="full">Full Arm</option>
-        </select>
-      </div>
-
-      <!-- Generate Button -->
-      <div class="text-center">
-        <button id="generateButton" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">
-          Generate Mehendi Design
-        </button>
-      </div>
-    </div>
-
-    <!-- Generated Design -->
-    <div id="result" class="mt-8 hidden text-center space-y-4">
-      <h3 class="text-xl font-semibold">Your Customized Mehendi Design</h3>
-      <canvas id="canvas" class="border border-gray-300 rounded-lg mx-auto"></canvas>
-    </div>
-  </main>
+    <p id="status" class="text-center mt-4"></p>
+  </div>
 
   <script>
-    // TensorFlow.js and Canvas Setup
-    let model;
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = 512;
-    canvas.height = 512;
+    async function createModel() {
+      // Create a simple model
+      const model = tf.sequential();
 
-    async function loadModel() {
-      // Load a pre-trained TensorFlow.js model
-      model = await tf.loadLayersModel("path/to/your/model.json"); // Replace with your model path
-      console.log("Model loaded");
+      // Add layers (dense and output layer)
+      model.add(tf.layers.dense({ units: 128, inputShape: [100], activation: 'relu' }));
+      model.add(tf.layers.dense({ units: 256 * 256 * 3, activation: 'sigmoid' }));
+      model.add(tf.layers.reshape({ targetShape: [256, 256, 3] }));
+
+      // Compile the model
+      model.compile({
+        optimizer: 'adam',
+        loss: 'meanSquaredError',
+        metrics: ['accuracy'],
+      });
+
+      // Generate random training data
+      const xs = tf.randomNormal([100, 100]);  // Random input vector
+      const ys = tf.randomNormal([100, 256, 256, 3]);  // Expected output (image)
+
+      // Start training the model
+      await model.fit(xs, ys, {
+        epochs: 5,
+        callbacks: {
+          onEpochEnd: async (epoch, logs) => {
+            console.log(`Epoch ${epoch}: loss = ${logs.loss}`);
+          }
+        }
+      });
+
+      // Save the model to IndexedDB (browser storage)
+      await model.save('indexeddb://my-model');
+      document.getElementById('status').textContent = "Model trained and saved to IndexedDB!";
+      console.log('Model trained and saved to IndexedDB');
     }
 
-    async function generateDesign(style, length) {
-      // Simulate input vector based on style and length
-      const inputVector = tf.tensor([styleToVector(style), lengthToVector(length)]);
-
-      // Generate design
-      const output = model.predict(inputVector).reshape([512, 512, 1]);
-      const designData = await output.data();
-
-      // Render the generated design on the canvas
-      const imageData = ctx.createImageData(512, 512);
-      for (let i = 0; i < designData.length; i++) {
-        const value = designData[i] * 255; // Normalize to 0-255
-        imageData.data[i * 4] = value; // Red
-        imageData.data[i * 4 + 1] = value; // Green
-        imageData.data[i * 4 + 2] = value; // Blue
-        imageData.data[i * 4 + 3] = 255; // Alpha
-      }
-      ctx.putImageData(imageData, 0, 0);
-    }
-
-    function styleToVector(style) {
-      const styles = { arabic: 0, bridal: 1, floral: 2, modern: 3 };
-      return styles[style] / 3; // Normalize to 0-1
-    }
-
-    function lengthToVector(length) {
-      const lengths = { hand: 0, elbow: 1, full: 2 };
-      return lengths[length] / 2; // Normalize to 0-1
-    }
-
-    // Event Listeners
-    document.getElementById("generateButton").addEventListener("click", async () => {
-      const style = document.getElementById("style").value;
-      const length = document.getElementById("length").value;
-
-      // Show the result section
-      document.getElementById("result").classList.remove("hidden");
-
-      // Generate design
-      await generateDesign(style, length);
+    // Event listener for generating and saving the model
+    document.getElementById('generateButton').addEventListener('click', async () => {
+      document.getElementById('status').textContent = "Training the model, please wait...";
+      await createModel();
     });
-
-    // Load the model on page load
-    loadModel();
   </script>
 </body>
 </html>
