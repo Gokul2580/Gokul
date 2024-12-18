@@ -3,86 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Hand Customization</title>
+  <title>AI Mehendi Design Generator</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 </head>
 <body class="bg-gray-100 font-sans">
 
   <!-- Header -->
   <header class="bg-green-500 text-white p-6">
-    <h1 class="text-3xl font-bold text-center">3D Hand Customizer</h1>
+    <h1 class="text-3xl font-bold text-center">AI Mehendi Design Generator</h1>
   </header>
 
   <!-- Main Content -->
   <main class="max-w-5xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg space-y-6">
-    <!-- 3D Model Section -->
-    <div id="3d-container" class="w-full h-96 bg-gray-200 rounded-lg"></div>
-
-    <!-- Controls -->
+    <!-- Customization Section -->
     <div class="space-y-4">
-      <!-- Color Picker -->
+      <h2 class="text-xl font-semibold">Customize Your Mehendi Design</h2>
+
+      <!-- Style Selection -->
       <div>
-        <label for="handColor" class="block text-sm font-medium text-gray-700">Select Hand Color</label>
-        <input type="color" id="handColor" value="#ffcc99" class="mt-2 p-2 border border-gray-300 rounded-lg">
+        <label for="style" class="block text-sm font-medium text-gray-700">Select Design Style</label>
+        <select id="style" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
+          <option value="arabic">Arabic</option>
+          <option value="bridal">Bridal</option>
+          <option value="floral">Floral</option>
+          <option value="modern">Modern</option>
+        </select>
       </div>
 
-      <!-- Reset Button -->
-      <div class="text-center">
-        <button id="resetButton" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600">Reset</button>
+      <!-- Length Selection -->
+      <div>
+        <label for="length" class="block text-sm font-medium text-gray-700">Select Design Length</label>
+        <select id="length" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
+          <option value="hand">Hand Only</option>
+          <option value="elbow">Hand to Elbow</option>
+          <option value="full">Full Arm</option>
+        </select>
       </div>
+
+      <!-- Generate Button -->
+      <div class="text-center">
+        <button id="generateButton" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">
+          Generate Mehendi Design
+        </button>
+      </div>
+    </div>
+
+    <!-- Generated Design -->
+    <div id="result" class="mt-8 hidden text-center space-y-4">
+      <h3 class="text-xl font-semibold">Your Customized Mehendi Design</h3>
+      <canvas id="canvas" class="border border-gray-300 rounded-lg mx-auto"></canvas>
     </div>
   </main>
 
   <script>
-    // THREE.js setup
-    const container = document.getElementById("3d-container");
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
+    // TensorFlow.js and Canvas Setup
+    let model;
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = 512;
+    canvas.height = 512;
 
-    // Add Light
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(0, 10, 10).normalize();
-    scene.add(light);
-
-    // Add Hand Geometry (Placeholder: Simple Torus as the "Hand")
-    const geometry = new THREE.TorusKnotGeometry(3, 1, 100, 16);
-    const material = new THREE.MeshStandardMaterial({ color: 0xffcc99 });
-    const hand = new THREE.Mesh(geometry, material);
-    scene.add(hand);
-
-    camera.position.z = 15;
-
-    // Animation Loop
-    function animate() {
-      requestAnimationFrame(animate);
-      hand.rotation.x += 0.01;
-      hand.rotation.y += 0.01;
-      renderer.render(scene, camera);
+    async function loadModel() {
+      // Load a pre-trained TensorFlow.js model
+      model = await tf.loadLayersModel("path/to/your/model.json"); // Replace with your model path
+      console.log("Model loaded");
     }
-    animate();
+
+    async function generateDesign(style, length) {
+      // Simulate input vector based on style and length
+      const inputVector = tf.tensor([styleToVector(style), lengthToVector(length)]);
+
+      // Generate design
+      const output = model.predict(inputVector).reshape([512, 512, 1]);
+      const designData = await output.data();
+
+      // Render the generated design on the canvas
+      const imageData = ctx.createImageData(512, 512);
+      for (let i = 0; i < designData.length; i++) {
+        const value = designData[i] * 255; // Normalize to 0-255
+        imageData.data[i * 4] = value; // Red
+        imageData.data[i * 4 + 1] = value; // Green
+        imageData.data[i * 4 + 2] = value; // Blue
+        imageData.data[i * 4 + 3] = 255; // Alpha
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    function styleToVector(style) {
+      const styles = { arabic: 0, bridal: 1, floral: 2, modern: 3 };
+      return styles[style] / 3; // Normalize to 0-1
+    }
+
+    function lengthToVector(length) {
+      const lengths = { hand: 0, elbow: 1, full: 2 };
+      return lengths[length] / 2; // Normalize to 0-1
+    }
 
     // Event Listeners
-    const handColorInput = document.getElementById("handColor");
-    handColorInput.addEventListener("input", (e) => {
-      const color = e.target.value;
-      hand.material.color.set(color);
+    document.getElementById("generateButton").addEventListener("click", async () => {
+      const style = document.getElementById("style").value;
+      const length = document.getElementById("length").value;
+
+      // Show the result section
+      document.getElementById("result").classList.remove("hidden");
+
+      // Generate design
+      await generateDesign(style, length);
     });
 
-    const resetButton = document.getElementById("resetButton");
-    resetButton.addEventListener("click", () => {
-      hand.material.color.set(0xffcc99); // Default color
-    });
-
-    // Handle Resizing
-    window.addEventListener("resize", () => {
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    });
+    // Load the model on page load
+    loadModel();
   </script>
 </body>
 </html>
