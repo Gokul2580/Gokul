@@ -34,11 +34,15 @@
 
     <script>
         // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAJTUWR1jrMA5X5gaVuuSoU3Bevo27wFOA",
+       const firebaseConfig = {
+            apiKey: "AIzaSyC4c4pU-ui6YYTWTl3usp2_0-RuLkfLYVk",
             authDomain: "api4home.firebaseapp.com",
+            databaseURL: "https://api4home-default-rtdb.firebaseio.com",
             projectId: "api4home",
-            storageBucket: "api4home.appspot.com"
+            storageBucket: "api4home.appspot.com",
+            messagingSenderId: "659636136570",
+            appId: "1:659636136570:web:37a818418505e31ae2e9c3",
+            measurementId: "G-JSDNGYP7YP"
         };
         firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage().ref();
