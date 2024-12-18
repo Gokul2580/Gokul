@@ -51,13 +51,18 @@
     <!-- Button to trigger model creation and saving -->
     <button id="generateButton" class="btn">Train and Save Model</button>
 
+    <!-- Button to download the model -->
+    <button id="downloadButton" class="btn" style="display:none;">Download Model</button>
+
     <p id="status" class="text-center mt-4"></p>
   </div>
 
   <script>
+    let model;
+
     async function createModel() {
       // Create a simple model
-      const model = tf.sequential();
+      model = tf.sequential();
 
       // Add layers (dense and output layer)
       model.add(tf.layers.dense({ units: 128, inputShape: [100], activation: 'relu' }));
@@ -87,14 +92,24 @@
 
       // Save the model to IndexedDB (browser storage)
       await model.save('indexeddb://my-model');
-      document.getElementById('status').textContent = "Model trained and saved to IndexedDB!";
+      document.getElementById('status').textContent = "Model trained and saved!";
       console.log('Model trained and saved to IndexedDB');
+
+      // Show the download button
+      document.getElementById('downloadButton').style.display = 'block';
     }
 
     // Event listener for generating and saving the model
     document.getElementById('generateButton').addEventListener('click', async () => {
       document.getElementById('status').textContent = "Training the model, please wait...";
       await createModel();
+    });
+
+    // Event listener for downloading the model
+    document.getElementById('downloadButton').addEventListener('click', async () => {
+      // Save the model to the file system as downloadable files (model.json and weights)
+      await model.save('downloads://my-mehendi-model');
+      document.getElementById('status').textContent = "Model saved as files!";
     });
   </script>
 </body>
