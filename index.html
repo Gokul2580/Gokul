@@ -3,113 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Model Generator</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Mehendi and Hairstyle Designs</title>
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f7fafc;
-      padding: 20px;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      text-align: center;
-      font-size: 2em;
-      color: #2d3748;
-    }
-    .btn {
-      background-color: #48bb78;
-      color: #ffffff;
-      padding: 12px 24px;
-      font-size: 1.2em;
-      border-radius: 8px;
-      cursor: pointer;
-      display: block;
-      margin: 20px auto;
-      width: 100%;
-      text-align: center;
-      transition: background-color 0.3s ease;
-    }
-    .btn:hover {
-      background-color: #38a169;
+      background-color: #f3f4f6;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>AI Model Generator</h1>
-    <p class="text-center">This demo shows how to create, train, and export a simple model in the browser using TensorFlow.js. Click the button below to train and save the model.</p>
-    
-    <!-- Button to trigger model creation and saving -->
-    <button id="generateButton" class="btn">Train and Save Model</button>
+<body class="bg-gray-100">
+  <!-- Main container -->
+  <div class="max-w-4xl mx-auto p-5">
+    <h1 class="text-4xl text-center text-gray-800 font-bold my-5">Mehendi & Hairstyle Design Gallery</h1>
 
-    <!-- Button to download the model -->
-    <button id="downloadButton" class="btn" style="display:none;">Download Model</button>
+    <!-- Tab Buttons -->
+    <div class="flex justify-center mb-8">
+      <button id="mehendiButton" class="bg-green-600 text-white px-6 py-3 rounded-md mx-2 hover:bg-green-700 transition duration-200">
+        Mehendi Designs
+      </button>
+      <button id="hairstyleButton" class="bg-blue-600 text-white px-6 py-3 rounded-md mx-2 hover:bg-blue-700 transition duration-200">
+        Hairstyle Designs
+      </button>
+    </div>
 
-    <p id="status" class="text-center mt-4"></p>
+    <!-- Gallery Section -->
+    <div id="mehendiGallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white shadow-lg rounded-lg p-4">
+        <img src="https://example.com/mehendi1.jpg" alt="Mehendi Design 1" class="w-full h-60 object-cover rounded-lg">
+        <p class="text-center mt-2 text-gray-700">Mehendi Design 1</p>
+      </div>
+      <div class="bg-white shadow-lg rounded-lg p-4">
+        <img src="https://example.com/mehendi2.jpg" alt="Mehendi Design 2" class="w-full h-60 object-cover rounded-lg">
+        <p class="text-center mt-2 text-gray-700">Mehendi Design 2</p>
+      </div>
+      <div class="bg-white shadow-lg rounded-lg p-4">
+        <img src="https://example.com/mehendi3.jpg" alt="Mehendi Design 3" class="w-full h-60 object-cover rounded-lg">
+        <p class="text-center mt-2 text-gray-700">Mehendi Design 3</p>
+      </div>
+    </div>
+
+    <!-- Hairstyle Gallery Section (Initially Hidden) -->
+    <div id="hairstyleGallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+      <div class="bg-white shadow-lg rounded-lg p-4">
+        <img src="https://example.com/hairstyle1.jpg" alt="Hairstyle 1" class="w-full h-60 object-cover rounded-lg">
+        <p class="text-center mt-2 text-gray-700">Hairstyle 1</p>
+      </div>
+      <div class="bg-white shadow-lg rounded-lg p-4">
+        <img src="https://example.com/hairstyle2.jpg" alt="Hairstyle 2" class="w-full h-60 object-cover rounded-lg">
+        <p class="text-center mt-2 text-gray-700">Hairstyle 2</p>
+      </div>
+      <div class="bg-white shadow-lg rounded-lg p-4">
+        <img src="https://example.com/hairstyle3.jpg" alt="Hairstyle 3" class="w-full h-60 object-cover rounded-lg">
+        <p class="text-center mt-2 text-gray-700">Hairstyle 3</p>
+      </div>
+    </div>
   </div>
 
   <script>
-    let model;
+    // Get the buttons and galleries
+    const mehendiButton = document.getElementById("mehendiButton");
+    const hairstyleButton = document.getElementById("hairstyleButton");
+    const mehendiGallery = document.getElementById("mehendiGallery");
+    const hairstyleGallery = document.getElementById("hairstyleGallery");
 
-    async function createModel() {
-      // Create a simple model
-      model = tf.sequential();
-
-      // Add layers (dense and output layer)
-      model.add(tf.layers.dense({ units: 128, inputShape: [100], activation: 'relu' }));
-      model.add(tf.layers.dense({ units: 256 * 256 * 3, activation: 'sigmoid' }));
-      model.add(tf.layers.reshape({ targetShape: [256, 256, 3] }));
-
-      // Compile the model
-      model.compile({
-        optimizer: 'adam',
-        loss: 'meanSquaredError',
-        metrics: ['accuracy'],
-      });
-
-      // Generate random training data
-      const xs = tf.randomNormal([100, 100]);  // Random input vector
-      const ys = tf.randomNormal([100, 256, 256, 3]);  // Expected output (image)
-
-      // Start training the model
-      await model.fit(xs, ys, {
-        epochs: 5,
-        callbacks: {
-          onEpochEnd: async (epoch, logs) => {
-            console.log(`Epoch ${epoch}: loss = ${logs.loss}`);
-          }
-        }
-      });
-
-      // Save the model to IndexedDB (browser storage)
-      await model.save('indexeddb://my-model');
-      document.getElementById('status').textContent = "Model trained and saved!";
-      console.log('Model trained and saved to IndexedDB');
-
-      // Show the download button
-      document.getElementById('downloadButton').style.display = 'block';
-    }
-
-    // Event listener for generating and saving the model
-    document.getElementById('generateButton').addEventListener('click', async () => {
-      document.getElementById('status').textContent = "Training the model, please wait...";
-      await createModel();
+    // Show Mehendi Gallery and hide Hairstyle Gallery
+    mehendiButton.addEventListener("click", () => {
+      mehendiGallery.classList.remove("hidden");
+      hairstyleGallery.classList.add("hidden");
+      mehendiButton.classList.add("bg-green-700");
+      mehendiButton.classList.remove("hover:bg-green-700");
+      hairstyleButton.classList.remove("bg-blue-700");
+      hairstyleButton.classList.add("hover:bg-blue-700");
     });
 
-    // Event listener for downloading the model
-    document.getElementById('downloadButton').addEventListener('click', async () => {
-      // Save the model to the file system as downloadable files (model.json and weights)
-      await model.save('downloads://my-mehendi-model');
-      document.getElementById('status').textContent = "Model saved as files!";
+    // Show Hairstyle Gallery and hide Mehendi Gallery
+    hairstyleButton.addEventListener("click", () => {
+      hairstyleGallery.classList.remove("hidden");
+      mehendiGallery.classList.add("hidden");
+      hairstyleButton.classList.add("bg-blue-700");
+      hairstyleButton.classList.remove("hover:bg-blue-700");
+      mehendiButton.classList.remove("bg-green-700");
+      mehendiButton.classList.add("hover:bg-green-700");
     });
   </script>
 </body>
