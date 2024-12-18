@@ -1,137 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Shape Detector</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Hand Customization</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+<body class="bg-gray-100 font-sans">
 
-    <!-- Header -->
-    <h1 class="text-4xl font-bold mb-8 text-blue-700">Face Shape Detector</h1>
+  <!-- Header -->
+  <header class="bg-green-500 text-white p-6">
+    <h1 class="text-3xl font-bold text-center">3D Hand Customizer</h1>
+  </header>
 
-    <!-- File Upload -->
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-        <form id="upload-form" class="space-y-4">
-            <input type="file" id="image-upload" accept="image/*" class="block w-full px-4 py-2 border rounded-md" required>
-            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 w-full">
-                Upload and Analyze
-            </button>
-        </form>
-        <img id="preview" class="mt-4 hidden rounded-lg shadow-md" alt="Preview">
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg space-y-6">
+    <!-- 3D Model Section -->
+    <div id="3d-container" class="w-full h-96 bg-gray-200 rounded-lg"></div>
+
+    <!-- Controls -->
+    <div class="space-y-4">
+      <!-- Color Picker -->
+      <div>
+        <label for="handColor" class="block text-sm font-medium text-gray-700">Select Hand Color</label>
+        <input type="color" id="handColor" value="#ffcc99" class="mt-2 p-2 border border-gray-300 rounded-lg">
+      </div>
+
+      <!-- Reset Button -->
+      <div class="text-center">
+        <button id="resetButton" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600">Reset</button>
+      </div>
     </div>
+  </main>
 
-    <!-- Results -->
-    <div id="result" class="mt-8 hidden bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 class="text-xl font-semibold text-blue-600">Analysis Result</h2>
-        <p><strong>Face Shape:</strong> <span id="face-shape" class="font-medium text-gray-700"></span></p>
-        <p class="mt-2"><strong>Suggestions:</strong> <span id="suggestions" class="text-gray-700"></span></p>
-    </div>
+  <script>
+    // THREE.js setup
+    const container = document.getElementById("3d-container");
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
 
-    <script>
-        // Firebase Configuration
-       const firebaseConfig = {
-            apiKey: "AIzaSyC4c4pU-ui6YYTWTl3usp2_0-RuLkfLYVk",
-            authDomain: "api4home.firebaseapp.com",
-            databaseURL: "https://api4home-default-rtdb.firebaseio.com",
-            projectId: "api4home",
-            storageBucket: "api4home.appspot.com",
-            messagingSenderId: "659636136570",
-            appId: "1:659636136570:web:37a818418505e31ae2e9c3",
-            measurementId: "G-JSDNGYP7YP"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage().ref();
+    // Add Light
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(0, 10, 10).normalize();
+    scene.add(light);
 
-        // TensorFlow Model
-        let faceModel = null;
-        faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh)
-            .then(model => {
-                faceModel = model;
-                console.log("Face model loaded.");
-            })
-            .catch(err => console.error("Model loading failed:", err));
+    // Add Hand Geometry (Placeholder: Simple Torus as the "Hand")
+    const geometry = new THREE.TorusKnotGeometry(3, 1, 100, 16);
+    const material = new THREE.MeshStandardMaterial({ color: 0xffcc99 });
+    const hand = new THREE.Mesh(geometry, material);
+    scene.add(hand);
 
-        // File Upload Handler
-        document.getElementById("upload-form").onsubmit = async (e) => {
-            e.preventDefault();
-            const fileInput = document.getElementById("image-upload");
-            const file = fileInput.files[0];
-            if (!file) return;
+    camera.position.z = 15;
 
-            // Show preview
-            const img = document.getElementById("preview");
-            img.src = URL.createObjectURL(file);
-            img.classList.remove("hidden");
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      hand.rotation.x += 0.01;
+      hand.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
 
-            img.onload = async () => {
-                if (!faceModel) {
-                    alert("Face detection model not loaded. Please try again later.");
-                    return;
-                }
+    // Event Listeners
+    const handColorInput = document.getElementById("handColor");
+    handColorInput.addEventListener("input", (e) => {
+      const color = e.target.value;
+      hand.material.color.set(color);
+    });
 
-                // Analyze the face
-                const predictions = await faceModel.estimateFaces({ input: img });
-                if (predictions.length > 0) {
-                    const faceShape = detectFaceShape(predictions[0].annotations);
-                    displayResults(faceShape);
-                    uploadToFirebase(file);
-                } else {
-                    alert("No face detected. Please upload a clear image.");
-                }
-            };
-        };
+    const resetButton = document.getElementById("resetButton");
+    resetButton.addEventListener("click", () => {
+      hand.material.color.set(0xffcc99); // Default color
+    });
 
-        // Detect Face Shape
-        function detectFaceShape(annotations) {
-            const jawWidth = calculateDistance(annotations.silhouette[0], annotations.silhouette[16]);
-            const cheekboneWidth = calculateDistance(annotations.leftCheek, annotations.rightCheek);
-            const faceHeight = calculateDistance(annotations.silhouette[8], annotations.midwayBetweenEyes);
-            const ratioWidthToHeight = cheekboneWidth / faceHeight;
-
-            if (ratioWidthToHeight < 0.85) return "Oval";
-            if (ratioWidthToHeight < 1) return "Round";
-            if (ratioWidthToHeight < 1.15) return "Square";
-            if (jawWidth < cheekboneWidth && cheekboneWidth > faceHeight) return "Heart";
-            if (cheekboneWidth > jawWidth && jawWidth > faceHeight) return "Diamond";
-            if (jawWidth === cheekboneWidth && faceHeight > cheekboneWidth) return "Rectangle";
-            return "Triangle";
-        }
-
-        // Calculate Distance Between Two Points
-        function calculateDistance(point1, point2) {
-            return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2));
-        }
-
-        // Display Results
-        function displayResults(faceShape) {
-            const suggestions = {
-                Oval: "Try loose waves or straight hair.",
-                Round: "High buns or long layers work well.",
-                Square: "Side parts or low ponytails are ideal.",
-                Heart: "Crown braids or beach waves are great.",
-                Diamond: "Soft curls or shoulder-length cuts work well.",
-                Rectangle: "Long layers or soft waves suit you.",
-                Triangle: "Chin-length bobs or layered cuts are perfect."
-            };
-
-            document.getElementById("result").classList.remove("hidden");
-            document.getElementById("face-shape").textContent = faceShape;
-            document.getElementById("suggestions").textContent = suggestions[faceShape] || "Custom suggestions coming soon!";
-        }
-
-        // Upload Image to Firebase
-        function uploadToFirebase(file) {
-            const timestamp = Date.now();
-            const fileRef = storage.child(`images/${timestamp}-${file.name}`);
-            fileRef.put(file)
-                .then(() => console.log("Image uploaded successfully."))
-                .catch(err => console.error("Image upload failed:", err));
-        }
-    </script>
+    // Handle Resizing
+    window.addEventListener("resize", () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
 </body>
 </html>
