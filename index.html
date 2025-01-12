@@ -1,447 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Video Background</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Material Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"> <!-- Poppins Font -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Themed Game</title>
+    <!-- Import Google Font (Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    body,
-    html {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-    }
-    
-    
-    
-        h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    /* Highlight Container */
-    .highlights-container {
-      display: flex;
-      overflow-x: auto;
-      gap: 10px;
-      padding: 10px;
-      background: transparent;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .highlight {
-      flex: 0 0 auto;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: #ddd;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid #007bff;
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out;
-    }
-
-    .highlight:hover {
-      transform: scale(1.1);
-    }
-
-    .highlight img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      position: relative;
-      width: 90%;
-      max-width: 600px;
-      background-color: black;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .modal-content video {
-      width: 100%;
-      height: auto;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    .modal-close:hover {
-      color: #ffcc00;
-    }
-    
-
-    /* Toolbar Styles */
-    .toolbar {
-      display: flex;
-      height: 75px;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #1e90ff;
-      color: white;
-      padding: 10px 20px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 4;
-    }
-
-    .toolbar .title {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .toolbar .toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .toolbar .search-icon {
-      font-size: 2rem;
-      cursor: pointer;
-    }
-
-    .toolbar .social-icons {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .toolbar .social-icons i {
-      font-size: 1.3rem;
-      color: white;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .toolbar .social-icons i:hover {
-      color: #ffcc00;
-    }
-
-    /* Video Background */
-    .video-container {
-      position: relative;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .video-container video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 1;
-    }
-
-    .video-container .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 2;
-    }
-
-    .video-container .content {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .video-container .content h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      animation: fade-in 3s ease-in-out;
-    }
-
-    .video-container .content h2 {
-      font-size: 1.5rem;
-      color: #ffcc00;
-      margin-bottom: 0.5rem;
-      animation: fade-in 3s ease-in-out 2s;
-    }
-
-    .video-container .content p {
-      font-size: 1.5rem;
-      animation: fade-in 3s ease-in-out 4s;
-    }
-
-    .video-container .content button {
-      padding: 10px 20px;
-      font-size: 1.8rem;
-      color: #fff;
-      background-color: #007bff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 20px;
-    }
-
-    .video-container .content button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Profile Section */
-    .profile-section {
-      text-align: center;
-      padding: 40px 20px;
-      background-color: #1e90ff;
-      color: white;
-    }
-
-    .profile-section img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 3px solid white;
-      margin-bottom: 10px;
-    }
-
-    .profile-section h3 {
-      font-size: 1.8rem;
-      margin-bottom: 5px;
-    }
-
-    .profile-section p {
-      font-size: 1.2rem;
-      color: #ffcc00;
-      margin-bottom: 20px;
-    }
-
-    .skills {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 10px;
-    }
-    
-      /* Animated Arrow */
-    .arrow-down {
-      margin-top: 20px;
-      font-size: 2rem;
-      color: #fff;
-      animation: bounce 1.5s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-10px);
-      }
-      60% {
-        transform: translateY(-5px);
-      }
-    }
-
-    .chip {
-      display: inline-block;
-      padding: 10px 15px;
-      background-color: #007bff;
-      color: white;
-      font-size: 1rem;
-      border-radius: 20px;
-      cursor: default;
-    }
-
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
-  
-    <script>
-    // JavaScript for Modal and Video Playback
-    document.addEventListener("DOMContentLoaded", () => {
-      const highlights = document.querySelectorAll(".highlight");
-      const modal = document.getElementById("videoModal");
-      const videoPlayer = document.getElementById("videoPlayer");
-      const closeModal = document.getElementById("closeModal");
-
-      // Open modal and play video
-      highlights.forEach(highlight => {
-        highlight.addEventListener("click", () => {
-          const videoSrc = highlight.getAttribute("data-video");
-          videoPlayer.src = videoSrc;
-          modal.classList.add("active");
-          videoPlayer.play();
-        });
-      });
-
-      // Close modal
-      closeModal.addEventListener("click", () => {
-        modal.classList.remove("active");
-        videoPlayer.pause();
-        videoPlayer.src = ""; // Stop video playback
-      });
-
-      // Close modal when clicking outside content
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.classList.remove("active");
-          videoPlayer.pause();
-          videoPlayer.src = ""; // Stop video playback
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/lib/index.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Apply the Google Font (Roboto) */
+        body {
+            font-family: 'Roboto', sans-serif; /* Applying Google Font */
+            font-size: 16px;
         }
-      });
-    });
-  </script>
-  
-  
-  
+
+        /* Enhanced Love-Themed Background Gradient */
+        @keyframes floatingHearts {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-30px); opacity: 0.6; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #FF63A5, #FF3366, #FF99CC);
+            background-size: 400% 400%;
+            animation: floatingHearts 5s ease-in-out infinite, gradientAnimation 15s ease infinite;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: #FF99CC;
+            opacity: 0.8;
+            animation: floatingHearts 3s infinite;
+        }
+
+        .heart:nth-child(odd) {
+            animation-duration: 4s;
+            animation-delay: 1s;
+        }
+
+        .heart:nth-child(even) {
+            animation-duration: 3.5s;
+            animation-delay: 2s;
+        }
+
+        /* Button styling */
+        .btn {
+            background-color: #FF66B2;
+            color: white;
+            padding: 12px 30px;
+            font-size: 1.25rem;
+            border-radius: 12px;
+            box-shadow: 0px 10px 30px rgba(255, 102, 178, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            background-color: #FF3385;
+        }
+
+        /* Title and terms */
+        .text-container {
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-top: 20%;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .terms-text {
+            font-size: 1rem;
+            margin-top: 10px;
+            animation: fadeIn 2s ease-out;
+            opacity: 0.8;
+        }
+
+        /* Dialog Styles */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #FF66B2, #FF3366);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            z-index: 10;
+            box-shadow: 0px 8px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px); /* Blurring background */
+            transition: transform 0.3s ease;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal img {
+            max-width: 120px;
+            margin-bottom: 20px;
+        }
+
+        .modal button {
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+        }
+
+        .modal button.yes {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0px 5px 15px rgba(0, 255, 0, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .modal button.no {
+            background-color: #f44336;
+            color: white;
+            box-shadow: 0px 5px 15px rgba(255, 0, 0, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        /* Enhanced Blast Animation with Pop Effect */
+        @keyframes blastAnimation {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+            20% {
+                transform: scale(1.3);
+                opacity: 1;
+                filter: blur(5px);
+            }
+            50% {
+                transform: scale(1.7);
+                opacity: 0.7;
+            }
+            80% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+                filter: blur(10px);
+            }
+        }
+
+        .blast {
+            animation: blastAnimation 1s forwards ease-in-out;
+        }
+
+        /* Close Button at Top Right */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            color: white;
+            font-size: 1.5rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+        }
+
+        /* Add movement animation to the "No" button */
+        @keyframes moveNoButton {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(100px, 0);
+            }
+            50% {
+                transform: translate(0, 100px);
+            }
+            75% {
+                transform: translate(-100px, 0);
+            }
+            100% {
+                transform: translate(0, -100px);
+            }
+        }
+
+        /* Applied class for movement */
+        .move-no-button {
+            animation: moveNoButton 1s infinite;
+        }
+
+        /* Animation for the Kidding text and laughing icon */
+        @keyframes floatingKiddingText {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+            50% {
+                opacity: 0.7;
+                transform: translate(50px, -50px);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(100px, -100px);
+            }
+        }
+
+        .kidding-text {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FF66B2;
+            top: -50px;
+            animation: floatingKiddingText 2s forwards;
+        }
+
+        .kidding-icon {
+            position: absolute;
+            top: -30px;
+            font-size: 3rem;
+            animation: floatingKiddingText 2s forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .btn {
+                font-size: 1.1rem;
+                padding: 10px 25px;
+            }
+
+            .modal {
+                width: 80%;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Toolbar -->
-  <div class="toolbar">
-    <div class="title">Goks</div>
-    <div class="toolbar-right">
-      <div class="search-icon">
-        <span class="material-icons">search</span>
-      </div>
-      <div class="social-icons">
-        <i class="fab fa-facebook-f"></i>
-        <i class="fab fa-twitter"></i>
-        <i class="fab fa-instagram"></i>
-        <i class="fab fa-linkedin-in"></i>
-      </div>
-    </div>
-  </div>
 
-  <!-- Video Container -->
-  <div class="video-container">
-    <video autoplay muted loop>
-      <source src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/Video_20241101213717488_by_VideoShow.mp4?alt=media&token=c995ebc5-9e2b-4645-b27b-e0df0d697fdd" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <div class="overlay"></div>
+    <!-- Floating Hearts -->
+    <div class="heart" style="left: 20%; top: 10%;">❤️</div>
+    <div class="heart" style="left: 70%; top: 30%;">❤️</div>
+    <div class="heart" style="left: 50%; top: 40%;">❤️</div>
+    <div class="heart" style="left: 10%; top: 70%;">❤️</div>
+    <div class="heart" style="left: 80%; top: 50%;">❤️</div>
 
-    <div class="content">
-      <h1>Welcome Dude, I'm Gokul</h1>
-      <h2>Founder and CEO of Thatwamasi Infotech</h2>
-      <p>Discover more</p>
-      <button onclick="alert('Explore more!')">WhatsApp</button>
-      <div class="arrow-down">
-        <i class="fas fa-chevron-down"></i>
-      </div>
-      
-      
-        <div class="highlights-container">
-    <div class="highlight" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
-      <img src="https://via.placeholder.com/80" alt="Highlight 1">
+    <!-- Main Content -->
+    <div class="text-container">
+        <h1 class="title">Path to My Heart</h1><br>
+        <p class="terms-text">By clicking "Serii Start !! , "you agree to "neenga browser close panita or idaila quit pannita neenga accept paninganu mean , once ulla poita full attend pananum...😜" Try pannunga 👀</p><br>
+        <button id="startGameBtn" class="btn mt-6">Serii Start !!</button>
     </div>
-    <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
-      <img src="https://via.placeholder.com/80/ff0000" alt="Highlight 2">
-    </div>
-    <div class="highlight" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
-      <img src="https://via.placeholder.com/80/00ff00" alt="Highlight 3">
-    </div>
-    <div class="highlight" data-video="https://www.w3schools.com/html/movie.mp4">
-      <img src="https://via.placeholder.com/80/0000ff" alt="Highlight 4">
-    </div>
-  </div>
 
+    <!-- Start Button -->
+    
 
-
-
-      
-      
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/b44a539b46f239d3b7852c28ce89da12.gif?alt=media&token=7bb538a6-df54-475c-bf1f-ab9cab939f89" alt="GIF">
+        <br>
+        <p>Is today the perfect day to say "yes" to forever...🤔!!</p>
+        <br>
+        <button class="yes" onclick="handleYes()">Yes</button>
+        <button class="no" onclick="handleNo()">No</button>
     </div>
-  </div>
-  
-  
-    <!-- Modal -->
-  <div class="modal" id="videoModal">
-    <div class="modal-content">
-      <button class="modal-close" id="closeModal">&times;</button>
-      <video id="videoPlayer" controls></video>
-    </div>
-  </div>
-  
-  
-  
-  
 
-  <!-- Profile Section -->
-  
-  
-  
-  <div class="profile-section">
-    <img src="https://via.placeholder.com/120" alt="Gokul's Profile">
-    <h3>Gokul</h3>
-    <p>Developer | Problem Solver | Entrepreneur</p>
-
-    <!-- Skills -->
-    <div class="skills">
-      <div class="chip">Android Development</div>
-      <div class="chip">Web Development</div>
-      <div class="chip">UI/UX Design</div>
-      <div class="chip">Problem Solving</div>
-      <div class="chip">Editing</div>
+    <div id="modal2" class="modal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/448eedf94d95ff77ff764d9d03868307.gif?alt=media&token=c2778717-7c3c-431a-818f-14fe0526981d" alt="GIF">
+        <br>
+        <p>Please , innoru time think pannu...🥹!!</p>
+        <br>
+        <button class="yes" onclick="handleYes()">Yes</button>
+        <button class="no" onclick="handleNo()">No</button>
     </div>
-  </div>
+
+    <div id="modal3" class="modal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/550617519a5284215cd5b50a2d8467e6.gif?alt=media&token=f48d6ecc-e4d9-40b2-a09e-c001c643952d" alt="GIF">
+        <br>
+      <p>Nee alaga iruka unmaidhaana...🤔👀!!</p>
+      <br>
+        <button class="yes" onclick="handleYes()">Yes</button>
+        <button class="no" onclick="handleNo()">No</button>
+    </div>
+
+    <div id="modal4" class="modal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/5efc731f49df30021361b9cfaaef28b2.gif?alt=media&token=f5075ec2-ad0e-45df-99c5-67c832ddc862" alt="GIF">
+        <br>
+        <p>Hayyoda Ipo yes click panra 🤨 !! illa kondruve...😒!!</p>
+        <br>
+        <button class="yes" onclick="handleYes()">Yes</button>
+        <button class="no" onclick="handleNo()">No</button>
+    </div>
+
+    <div id="modal5" class="modal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <br>
+        <img src="https://via.placeholder.com/100" alt="GIF">
+        <br>
+        <p>Ipo epdi no soluva...😝!!</p>
+        <br>
+        <button class="yes" onclick="handleYes()">Yes</button>
+        <button class="no" onclick="handleNo()">No</button>
+    </div>
+
+    <script>
+        let noClickCount = 0;  // To count how many times "No" is clicked
+
+        // Show modal based on the click flow
+        function showModal(index) {
+            const activeModal = document.querySelector('.modal.active');
+            activeModal.classList.add('blast');
+
+            setTimeout(() => {
+                window.location.href = 'https://yourgameurl.com'; // Redirect after animation
+            }, 1000);  // Wait for animation to finish before redirect
+        }
+
+        function closeModal() {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => modal.classList.remove('active'));
+        }
+
+        function handleYes() {
+            // Animate the modal blast when 'Yes' is clicked
+            const activeModal = document.querySelector('.modal.active');
+            activeModal.classList.add('blast');
+
+            setTimeout(() => {
+                window.location.href = 'https://yourgameurl.com'; // Redirect after animation
+            }, 1000);  // Wait for animation to finish before redirect
+        }
+
+        function handleNo() {
+            noClickCount++;
+
+            if (noClickCount === 4) {
+                // Handle the "Kidding!" part on the 4th No click
+                const activeModal = document.querySelector('.modal.active');
+                const kiddingText = document.createElement('div');
+                kiddingText.classList.add('kidding-text');
+                kiddingText.innerText = 'Ipo epdi no soluva';
+
+                const kiddingIcon = document.createElement('div');
+                kiddingIcon.classList.add('kidding-icon');
+                kiddingIcon.innerText = '😤';
+
+                activeModal.appendChild(kiddingText);
+                activeModal.appendChild(kiddingIcon);
+
+                // Add movement for the "No" button after the 4th click
+                const noButton = activeModal.querySelector('.no');
+                noButton.classList.add('move-no-button');
+            } else {
+                // Show the next modal after "No" click
+                closeModal();
+                showModal(noClickCount + 1);
+            }
+        }
+
+        // Handle the "Start a Game" button click
+        document.getElementById("startGameBtn").addEventListener("click", function() {
+            showModal(1); // Show the first modal when button is clicked
+        });
+    </script>
+
 </body>
-
 </html>
