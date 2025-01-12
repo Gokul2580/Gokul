@@ -8,104 +8,73 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     body {
-      background: linear-gradient(to bottom, #fdeff9, #ffdde1);
       font-family: 'Courgette', cursive;
       margin: 0;
-      overflow: hidden;
+      padding: 0;
+      background: linear-gradient(to bottom, #fdeff9, #ffdde1);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .letter-container {
-      max-width: 90%;
-      width: 600px;
-      background: white;
-      border: 2px solid #f3c1d1;
-      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      position: relative;
+      text-align: center;
     }
 
     .yes-button {
-      display: block;
-      width: 100%;
-      background: #ff6b6b;
-      color: white;
-      text-align: center;
-      padding: 12px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 30px;
+      display: inline-block;
       margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      background: #ff6b6b;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background 0.3s ease;
     }
 
     .yes-button:hover {
       background: #ff3b3b;
     }
-
-    /* Block interactions overlay */
-    .blocking-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .blocking-message {
-      color: white;
-      font-size: 1.5rem;
-      font-weight: bold;
-      text-align: center;
-    }
   </style>
 </head>
-
 <body>
-  <!-- Blocking Overlay -->
-  <div class="blocking-overlay" id="blockingOverlay">
-    <div class="blocking-message">
-      Please click "Yes" to proceed.
-    </div>
-  </div>
-
-  <!-- Love Letter -->
   <div class="letter-container">
     <p>Dear Love,</p>
-    <p>
-      I cannot describe how much you mean to me. Every moment with you feels magical, and I am so grateful for your presence in my life.
-    </p>
+    <p>I cannot describe how much you mean to me. Every moment with you feels magical, and I am so grateful for your presence in my life.</p>
     <button class="yes-button" id="yesButton">Yes</button>
   </div>
 
   <script>
-    // Prevent Back Button
+    // Prevent Back Navigation
     window.history.pushState(null, null, window.location.href);
     window.addEventListener('popstate', function () {
       window.history.pushState(null, null, window.location.href);
     });
 
-    // Enable interactions after clicking "Yes"
+    // Show alert when attempting to leave
+    window.addEventListener('beforeunload', function (e) {
+      // Standard message (modern browsers may ignore custom messages)
+      e.preventDefault();
+      e.returnValue = '';
+    });
+
+    // Handle "Yes" button click
     document.getElementById('yesButton').addEventListener('click', function () {
-      // Remove the blocking overlay
-      document.getElementById('blockingOverlay').style.display = 'none';
-
-      // Allow the back button
-      window.onpopstate = null;
-
       alert('Thank you for saying Yes!');
+      // Optionally redirect to WhatsApp or another page
+      window.location.href = 'https://wa.me/1234567890?text=Hey, I just said Yes!';
     });
   </script>
 </body>
