@@ -371,38 +371,31 @@
         }
 
         function handleNo() {
-        noClickCount++;
+            noClickCount++;
 
-        const activeModal = document.querySelector('.modal.active');
-        if (!activeModal) return;
-
-        // Check if noClickCount is within the range of noClickMessages
-        if (noClickCount <= noClickMessages.length) {
-            const messageData = noClickMessages[noClickCount - 1]; // Get the message for the current click count
-
-            // Create or update kiddingText
-            let kiddingText = activeModal.querySelector('.kidding-text');
-            if (!kiddingText) {
-                kiddingText = document.createElement('div');
+            if (noClickCount === 4) {
+                // Handle the "Kidding!" part on the 4th No click
+                const activeModal = document.querySelector('.modal.active');
+                const kiddingText = document.createElement('div');
                 kiddingText.classList.add('kidding-text');
-                activeModal.appendChild(kiddingText);
-            }
-            kiddingText.innerText = messageData.text;
+                kiddingText.innerText = 'Ipo epdi no soluva';
 
-            // Create or update kiddingIcon
-            let kiddingIcon = activeModal.querySelector('.kidding-icon');
-            if (!kiddingIcon) {
-                kiddingIcon = document.createElement('div');
+                const kiddingIcon = document.createElement('div');
                 kiddingIcon.classList.add('kidding-icon');
-                activeModal.appendChild(kiddingIcon);
-            }
-            kiddingIcon.innerText = messageData.icon;
-        } else {
-            // After the 4th click, stop updating or handle final behavior
-            console.log("No further updates after 4 clicks.");
-        }
-    }
+                kiddingIcon.innerText = '😤';
 
+                activeModal.appendChild(kiddingText);
+                activeModal.appendChild(kiddingIcon);
+
+                // Add movement for the "No" button after the 4th click
+                const noButton = activeModal.querySelector('.no');
+                noButton.classList.add('move-no-button');
+            } else {
+                // Show the next modal after "No" click
+                closeModal();
+                showModal(noClickCount + 1);
+            }
+        }
 
         // Handle the "Start a Game" button click
         document.getElementById("startGameBtn").addEventListener("click", function() {
