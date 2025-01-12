@@ -1,422 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Themed Game</title>
-    <!-- Import Google Font (Roboto) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Love Letter</title>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/lib/index.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Apply the Google Font (Roboto) */
-        body {
-            font-family: 'Roboto', sans-serif; /* Applying Google Font */
-            font-size: 16px;
-        }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-        /* Enhanced Love-Themed Background Gradient */
-        @keyframes floatingHearts {
-            0% { transform: translateY(0); opacity: 1; }
-            50% { transform: translateY(-30px); opacity: 0.6; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(45deg, #FF63A5, #FF3366, #FF99CC);
-            background-size: 400% 400%;
-            animation: floatingHearts 5s ease-in-out infinite, gradientAnimation 15s ease infinite;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  <!-- Fireworks JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.0.0/dist/fireworks.min.js"></script>
 
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .heart {
-            position: absolute;
-            font-size: 2rem;
-            color: #FF99CC;
-            opacity: 0.8;
-            animation: floatingHearts 3s infinite;
-        }
-
-        .heart:nth-child(odd) {
-            animation-duration: 4s;
-            animation-delay: 1s;
-        }
-
-        .heart:nth-child(even) {
-            animation-duration: 3.5s;
-            animation-delay: 2s;
-        }
-
-        /* Button styling */
-        .btn {
-            background-color: #FF66B2;
-            color: white;
-            padding: 12px 30px;
-            font-size: 1.25rem;
-            border-radius: 12px;
-            box-shadow: 0px 10px 30px rgba(255, 102, 178, 0.3);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: scale(1.1);
-            background-color: #FF3385;
-        }
-
-        /* Title and terms */
-        .text-container {
-            text-align: center;
-            color: white;
-            z-index: 2;
-        }
-
-        .title {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-top: 20%;
-            animation: fadeIn 2s ease-out;
-        }
-
-        .terms-text {
-            font-size: 1rem;
-            margin-top: 10px;
-            animation: fadeIn 2s ease-out;
-            opacity: 0.8;
-        }
-
-        /* Dialog Styles */
-        .modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(145deg, #FF66B2, #FF3366);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            display: none;
-            z-index: 10;
-            box-shadow: 0px 8px 35px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px); /* Blurring background */
-            transition: transform 0.3s ease;
-            width: 300px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal img {
-            max-width: 120px;
-            margin-bottom: 20px;
-        }
-
-        .modal button {
-            padding: 12px 20px;
-            margin: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            border: none;
-        }
-
-        .modal button.yes {
-            background-color: #4CAF50;
-            color: white;
-            box-shadow: 0px 5px 15px rgba(0, 255, 0, 0.3);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .modal button.no {
-            background-color: #f44336;
-            color: white;
-            box-shadow: 0px 5px 15px rgba(255, 0, 0, 0.3);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .modal.active {
-            display: block;
-        }
-
-        /* Enhanced Blast Animation with Pop Effect */
-        @keyframes blastAnimation {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-                filter: blur(0px);
-            }
-            20% {
-                transform: scale(1.3);
-                opacity: 1;
-                filter: blur(5px);
-            }
-            50% {
-                transform: scale(1.7);
-                opacity: 0.7;
-            }
-            80% {
-                transform: scale(1.5);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(0);
-                opacity: 0;
-                filter: blur(10px);
-            }
-        }
-
-        .blast {
-            animation: blastAnimation 1s forwards ease-in-out;
-        }
-
-        /* Close Button at Top Right */
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: transparent;
-            color: white;
-            font-size: 1.5rem;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .close-btn:hover {
-            transform: scale(1.2);
-        }
-
-        /* Add movement animation to the "No" button */
-        @keyframes moveNoButton {
-            0% {
-                transform: translate(0, 0);
-            }
-            25% {
-                transform: translate(100px, 0);
-            }
-            50% {
-                transform: translate(0, 100px);
-            }
-            75% {
-                transform: translate(-100px, 0);
-            }
-            100% {
-                transform: translate(0, -100px);
-            }
-        }
-
-        /* Applied class for movement */
-        .move-no-button {
-            animation: moveNoButton 1s infinite;
-        }
-
-        /* Animation for the Kidding text and laughing icon */
-        @keyframes floatingKiddingText {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0);
-            }
-            50% {
-                opacity: 0.7;
-                transform: translate(50px, -50px);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(100px, -100px);
-            }
-        }
-
-        .kidding-text {
-            position: absolute;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #FF66B2;
-            top: -50px;
-            animation: floatingKiddingText 2s forwards;
-        }
-
-        .kidding-icon {
-            position: absolute;
-            top: -30px;
-            font-size: 3rem;
-            animation: floatingKiddingText 2s forwards;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .title {
-                font-size: 2.5rem;
-            }
-
-            .btn {
-                font-size: 1.1rem;
-                padding: 10px 25px;
-            }
-
-            .modal {
-                width: 80%;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Floating Hearts -->
-    <div class="heart" style="left: 20%; top: 10%;">❤️</div>
-    <div class="heart" style="left: 70%; top: 30%;">❤️</div>
-    <div class="heart" style="left: 50%; top: 40%;">❤️</div>
-    <div class="heart" style="left: 10%; top: 70%;">❤️</div>
-    <div class="heart" style="left: 80%; top: 50%;">❤️</div>
-
-    <!-- Main Content -->
-    <div class="text-container">
-        <h1 class="title">Path to My Heart</h1><br>
-        <p class="terms-text">By clicking "Serii Start !! , "you agree to "neenga browser close panita or idaila quit pannita neenga accept paninganu mean , once ulla poita full attend pananum...😜" Try pannunga 👀</p><br>
-        <button id="startGameBtn" class="btn mt-6">Serii Start !!</button>
-    </div>
-
-    <!-- Start Button -->
-    
-
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/b44a539b46f239d3b7852c28ce89da12.gif?alt=media&token=7bb538a6-df54-475c-bf1f-ab9cab939f89" alt="GIF">
-        <br>
-        <p>Is today the perfect day to say "yes" to forever...🤔!!</p>
-        <br>
-        <button class="yes" onclick="handleYes()">Yes</button>
-        <button class="no" onclick="handleNo()">No</button>
-    </div>
-
-    <div id="modal2" class="modal">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/448eedf94d95ff77ff764d9d03868307.gif?alt=media&token=c2778717-7c3c-431a-818f-14fe0526981d" alt="GIF">
-        <br>
-        <p>Please , innoru time think pannu...🥹!!</p>
-        <br>
-        <button class="yes" onclick="handleYes()">Yes</button>
-        <button class="no" onclick="handleNo()">No</button>
-    </div>
-
-    <div id="modal3" class="modal">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/550617519a5284215cd5b50a2d8467e6.gif?alt=media&token=f48d6ecc-e4d9-40b2-a09e-c001c643952d" alt="GIF">
-        <br>
-      <p>Nee alaga iruka unmaidhaana...🤔👀!!</p>
-      <br>
-        <button class="yes" onclick="handleYes()">Yes</button>
-        <button class="no" onclick="handleNo()">No</button>
-    </div>
-
-    <div id="modal4" class="modal">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <img src="https://firebasestorage.googleapis.com/v0/b/apiv1-b18ed.appspot.com/o/5efc731f49df30021361b9cfaaef28b2.gif?alt=media&token=f5075ec2-ad0e-45df-99c5-67c832ddc862" alt="GIF">
-        <br>
-        <p>Hayyoda Ipo yes click panra 🤨 !! illa kondruve...😒!!</p>
-        <br>
-        <button class="yes" onclick="handleYes()">Yes</button>
-        <button class="no" onclick="handleNo()">No</button>
-    </div>
-
-    <div id="modal5" class="modal">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <br>
-        <img src="https://via.placeholder.com/100" alt="GIF">
-        <br>
-        <p>Ipo epdi no soluva...😝!!</p>
-        <br>
-        <button class="yes" onclick="handleYes()">Yes</button>
-        <button class="no" onclick="handleNo()">No</button>
-    </div>
-
-    <script>
-        let noClickCount = 0;  // To count how many times "No" is clicked
-        
-        const noClickMessages = [
-        { text: "First click! Are you sure? 🤔", icon: "🙄" },
-        { text: "Second click? Think again! 😅", icon: "😜" },
-        { text: "Third click! Really? 😳", icon: "🤔" },
-        { text: "Okay, last chance! 😤", icon: "😤" }
-    ];
-    
-
-        // Show modal based on the click flow
-        function showModal(index) {
-            const activeModal = document.querySelector('.modal.active');
-            activeModal.classList.add('blast');
-
-            setTimeout(() => {
-                window.location.href = 'https://yourgameurl.com'; // Redirect after animation
-            }, 1000);  // Wait for animation to finish before redirect
-        }
-
-        function closeModal() {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => modal.classList.remove('active'));
-        }
-
-        function handleYes() {
-            // Animate the modal blast when 'Yes' is clicked
-            const activeModal = document.querySelector('.modal.active');
-            activeModal.classList.add('blast');
-
-            setTimeout(() => {
-                window.location.href = 'https://yourgameurl.com'; // Redirect after animation
-            }, 1000);  // Wait for animation to finish before redirect
-        }
-
-        function handleNo() {
-        noClickCount++;
-
-        const activeModal = document.querySelector('.modal.active');
-        if (!activeModal) return;
-
-        // Check if noClickCount is within the range of noClickMessages
-        if (noClickCount <= noClickMessages.length) {
-            const messageData = noClickMessages[noClickCount - 1]; // Get the message for the current click count
-
-            // Create or update kiddingText
-            let kiddingText = activeModal.querySelector('.kidding-text');
-            if (!kiddingText) {
-                kiddingText = document.createElement('div');
-                kiddingText.classList.add('kidding-text');
-                activeModal.appendChild(kiddingText);
-            }
-            kiddingText.innerText = messageData.text;
-
-            // Create or update kiddingIcon
-            let kiddingIcon = activeModal.querySelector('.kidding-icon');
-            if (!kiddingIcon) {
-                kiddingIcon = document.createElement('div');
-                kiddingIcon.classList.add('kidding-icon');
-                activeModal.appendChild(kiddingIcon);
-            }
-            kiddingIcon.innerText = messageData.icon;
-        } else {
-            // After the 4th click, stop updating or handle final behavior
-            console.log("No further updates after 4 clicks.");
-        }
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background: linear-gradient(180deg, #ff8a00, #da00ff);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      position: relative;
     }
 
+    .letter-content {
+      animation: fadeIn 3s ease-out;
+    }
 
-        // Handle the "Start a Game" button click
-        document.getElementById("startGameBtn").addEventListener("click", function() {
-            showModal(1); // Show the first modal when button is clicked
-        });
-    </script>
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    /* Typing effect animation */
+    .typing-effect {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: .15em solid black;
+      animation: typing 4s steps(30) 1s 1 normal both;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    .letter-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .message-button {
+      animation: bounce 1s infinite alternate;
+      transition: all 0.3s ease;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-15px); }
+    }
+
+    .fireworks-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .message-button:hover {
+      transform: scale(1.1);
+      background-color: #d600d6;
+    }
+
+    /* Glow effect for the button */
+    .glow-button {
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 15px #fff; }
+      100% { box-shadow: 0 0 25px #ff00ff, 0 0 50px #ff00ff; }
+    }
+
+    .section-title {
+      font-family: 'Courgette', cursive;
+      font-size: 2.5rem;
+      color: #d600d6;
+      margin-bottom: 20px;
+    }
+
+    .subheading {
+      font-size: 1.2rem;
+      color: #333;
+      margin-top: 20px;
+    }
+
+    /* Extra animation */
+    .message-button {
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Heart background animation */
+    .heart-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/heart.png') repeat center center;
+      opacity: 0.1;
+      animation: heartAnimation 10s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes heartAnimation {
+      0% { opacity: 0.1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(1.05); }
+      100% { opacity: 0.1; transform: scale(1); }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Fireworks JS Initialization -->
+  <div class="fireworks-container"></div>
+
+  <!-- Heart background animation -->
+  <div class="heart-background"></div>
+
+  <!-- Content Wrapper -->
+  <div class="container mx-auto px-4 py-10">
+
+    <!-- Love Letter Container -->
+    <div class="letter-container text-center p-8">
+      <!-- Title -->
+      <h1 class="text-4xl font-extrabold text-pink-600 mb-5">A Letter from My Heart</h1>
+      
+      <!-- Typing effect content -->
+      <p class="text-lg text-gray-800 leading-relaxed mb-6 typing-effect">
+        Heyy...👀!! > 11:11 Gem👻
+      </p>
+      
+      <h2 class="section-title">Thank You for Saying Yes!</h2>
+      
+      <p class="subheading">Your acceptance has made me the happiest person on Earth, and I cannot wait to spend my life with you. Together, we'll make every moment count. 💖</p>
+      
+      <!-- Message Me Button -->
+      <a id="messageButton" class="message-button glow-button inline-block mt-12 px-8 py-4 bg-pink-600 rounded-full text-lg font-semibold text-white hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-400">
+        Message Me
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    const fireworks = new Fireworks.default({
+      acceleration: 1.2,
+      friction: 0.95,
+      gravity: 1,
+      particles: 100,
+      speed: 5,
+      explosion: 0.8,
+      sound: true,
+    });
+
+    fireworks.start();
+
+    // Function to trigger fireworks and redirect after animation
+    function handleButtonClick() {
+      // Trigger fireworks animation
+      fireworks.stop();
+      fireworks.start();
+
+      // Delay redirection after animation
+      setTimeout(() => {
+        window.location.href = 'https://wa.me/1234567890?text=Hey,%20I%20just%20saw%20your%20love%20letter%20and%20I%20m%20so%20happy!';
+      }, 2000);  // 2 seconds delay to wait for the animation to finish
+    }
+
+    // Add event listener for the button
+    document.querySelector('#messageButton').addEventListener('click', handleButtonClick);
+  </script>
 
 </body>
 </html>
