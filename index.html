@@ -6,7 +6,7 @@
   <title>Love Letter</title>
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -17,10 +17,6 @@
       font-family: 'Courgette', cursive;
       margin: 0;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
     }
 
     .letter-container {
@@ -34,21 +30,7 @@
       position: relative;
     }
 
-    .letter-content {
-      font-size: 1.2rem;
-      color: #333;
-      line-height: 1.8;
-    }
-
-    .signature {
-      font-family: 'Great Vibes', cursive;
-      font-size: 1.8rem;
-      text-align: right;
-      color: #555;
-      margin-top: 20px;
-    }
-
-    .let-me-know-button {
+    .yes-button {
       display: block;
       width: 100%;
       background: #ff6b6b;
@@ -64,79 +46,66 @@
       transition: all 0.3s ease;
     }
 
-    .let-me-know-button:hover {
+    .yes-button:hover {
       background: #ff3b3b;
     }
 
-    /* Falling hearts animation */
-    .heart {
+    /* Block interactions overlay */
+    .blocking-overlay {
       position: fixed;
-      width: 20px;
-      height: 20px;
-      background-color: red;
-      clip-path: polygon(50% 0%, 61% 19%, 98% 19%, 75% 50%, 85% 91%, 50% 75%, 15% 91%, 25% 50%, 2% 19%, 39% 19%);
-      animation: fall 6s infinite linear;
-      opacity: 0.8;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    @keyframes fall {
-      0% {
-        transform: translateY(-100px) scale(0.8);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) scale(1.2);
-        opacity: 0.2;
-      }
+    .blocking-message {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
-  <!-- Falling hearts -->
-  <div id="heartContainer"></div>
+  <!-- Blocking Overlay -->
+  <div class="blocking-overlay" id="blockingOverlay">
+    <div class="blocking-message">
+      Please click "Yes" to proceed.
+    </div>
+  </div>
 
   <!-- Love Letter -->
   <div class="letter-container">
-    <div class="letter-content">
-      <p>Dear Love,</p>
-      <p>
-        I cannot describe how much you mean to me. Every moment with you feels magical, and I am so grateful for your presence in my life. You make every day brighter and more beautiful. 💖
-      </p>
-      <p>
-        Let’s create wonderful memories together. Thank you for being the reason for my happiness. You are truly special to me! 🌹
-      </p>
-    </div>
-
-    <div class="signature">Yours always,<br>Gokul</div>
-
-    <!-- Let Me Know Button -->
-    <button class="let-me-know-button" id="letMeKnowButton">Let Me Know</button>
+    <p>Dear Love,</p>
+    <p>
+      I cannot describe how much you mean to me. Every moment with you feels magical, and I am so grateful for your presence in my life.
+    </p>
+    <button class="yes-button" id="yesButton">Yes</button>
   </div>
 
   <script>
-    // Generate falling hearts
-    function createHearts() {
-      const heartContainer = document.getElementById('heartContainer');
-      for (let i = 0; i < 20; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.style.left = Math.random() * window.innerWidth + 'px';
-        heart.style.animationDelay = Math.random() * 5 + 's';
-        heart.style.animationDuration = 3 + Math.random() * 2 + 's';
-        heartContainer.appendChild(heart);
+    // Prevent Back Button
+    window.history.pushState(null, null, window.location.href);
+    window.addEventListener('popstate', function () {
+      window.history.pushState(null, null, window.location.href);
+    });
 
-        // Remove hearts after animation ends
-        heart.addEventListener('animationend', () => heart.remove());
-      }
-    }
+    // Enable interactions after clicking "Yes"
+    document.getElementById('yesButton').addEventListener('click', function () {
+      // Remove the blocking overlay
+      document.getElementById('blockingOverlay').style.display = 'none';
 
-    createHearts();
-    setInterval(createHearts, 5000); // Continuously generate hearts
+      // Allow the back button
+      window.onpopstate = null;
 
-    // Redirect to WhatsApp with a predefined message
-    document.getElementById('letMeKnowButton').addEventListener('click', () => {
-      window.location.href = 'https://wa.me/917845431658?text=Hey,%20I%20just%20read%20your%20beautiful%20letter!%20Let’s%20talk%20more!';
+      alert('Thank you for saying Yes!');
     });
   </script>
 </body>
