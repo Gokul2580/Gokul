@@ -345,7 +345,13 @@
     <script>
         let noClickCount = 0;  // To count how many times "No" is clicked
         
-        
+        const noClickMessages = [
+        { text: "First click! Are you sure? 🤔", icon: "🙄" },
+        { text: "Second click? Think again! 😅", icon: "😜" },
+        { text: "Third click! Really? 😳", icon: "🤔" },
+        { text: "Okay, last chance! 😤", icon: "😤" }
+    ];
+    
 
         // Show modal based on the click flow
         function showModal(index) {
