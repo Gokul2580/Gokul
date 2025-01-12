@@ -3,210 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Love Letter</title>
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Great+Vibes&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Fireworks JS -->
-  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.0.0/dist/fireworks.min.js"></script>
-
-  <!-- Custom CSS -->
   <style>
     body {
-      background: linear-gradient(180deg, #ff8a00, #da00ff);
-      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #fdeff9, #ffdde1);
+      font-family: 'Courgette', cursive;
+      margin: 0;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .letter-container {
+      max-width: 90%;
+      width: 600px;
+      background: white;
+      border: 2px solid #f3c1d1;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       position: relative;
     }
 
     .letter-content {
-      animation: fadeIn 3s ease-out;
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    /* Typing effect animation */
-    .typing-effect {
-      display: inline-block;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: .15em solid black;
-      animation: typing 4s steps(30) 1s 1 normal both;
-    }
-
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-
-    .letter-container {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 15px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
-
-    .message-button {
-      animation: bounce 1s infinite alternate;
-      transition: all 0.3s ease;
-    }
-
-    @keyframes bounce {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-15px); }
-    }
-
-    .fireworks-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    .message-button:hover {
-      transform: scale(1.1);
-      background-color: #d600d6;
-    }
-
-    /* Glow effect for the button */
-    .glow-button {
-      animation: glow 1.5s infinite alternate;
-    }
-
-    @keyframes glow {
-      0% { box-shadow: 0 0 15px #fff; }
-      100% { box-shadow: 0 0 25px #ff00ff, 0 0 50px #ff00ff; }
-    }
-
-    .section-title {
-      font-family: 'Courgette', cursive;
-      font-size: 2.5rem;
-      color: #d600d6;
-      margin-bottom: 20px;
-    }
-
-    .subheading {
       font-size: 1.2rem;
       color: #333;
+      line-height: 1.8;
+    }
+
+    .signature {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.8rem;
+      text-align: right;
+      color: #555;
       margin-top: 20px;
     }
 
-    /* Extra animation */
-    .message-button {
-      animation: pulse 2s infinite ease-in-out;
+    .let-me-know-button {
+      display: block;
+      width: 100%;
+      background: #ff6b6b;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    @keyframes pulse {
+    .let-me-know-button:hover {
+      background: #ff3b3b;
+    }
+
+    /* Falling hearts animation */
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      clip-path: polygon(50% 0%, 61% 19%, 98% 19%, 75% 50%, 85% 91%, 50% 75%, 15% 91%, 25% 50%, 2% 19%, 39% 19%);
+      animation: fall 6s infinite linear;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
       0% {
-        transform: scale(1);
+        transform: translateY(-100px) scale(0.8);
         opacity: 1;
-      }
-      50% {
-        transform: scale(1.1);
-        opacity: 0.8;
       }
       100% {
-        transform: scale(1);
-        opacity: 1;
+        transform: translateY(100vh) scale(1.2);
+        opacity: 0.2;
       }
     }
-
-    /* Heart background animation */
-    .heart-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://www.transparenttextures.com/patterns/heart.png') repeat center center;
-      opacity: 0.1;
-      animation: heartAnimation 10s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    @keyframes heartAnimation {
-      0% { opacity: 0.1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(1.05); }
-      100% { opacity: 0.1; transform: scale(1); }
-    }
-
   </style>
 </head>
 
 <body>
+  <!-- Falling hearts -->
+  <div id="heartContainer"></div>
 
-  <!-- Fireworks JS Initialization -->
-  <div class="fireworks-container"></div>
-
-  <!-- Heart background animation -->
-  <div class="heart-background"></div>
-
-  <!-- Content Wrapper -->
-  <div class="container mx-auto px-4 py-10">
-
-    <!-- Love Letter Container -->
-    <div class="letter-container text-center p-8">
-      <!-- Title -->
-      <h1 class="text-4xl font-extrabold text-pink-600 mb-5">A Letter from My Heart</h1>
-      
-      <!-- Typing effect content -->
-      <p class="text-lg text-gray-800 leading-relaxed mb-6 typing-effect">
-        Heyy...👀!! > 11:11 Gem👻
+  <!-- Love Letter -->
+  <div class="letter-container">
+    <div class="letter-content">
+      <p>Dear Love,</p>
+      <p>
+        I cannot describe how much you mean to me. Every moment with you feels magical, and I am so grateful for your presence in my life. You make every day brighter and more beautiful. 💖
       </p>
-      
-      <h2 class="section-title">Thank You for Saying Yes!</h2>
-      
-      <p class="subheading">Your acceptance has made me the happiest person on Earth, and I cannot wait to spend my life with you. Together, we'll make every moment count. 💖</p>
-      
-      <!-- Message Me Button -->
-      <a id="messageButton" class="message-button glow-button inline-block mt-12 px-8 py-4 bg-pink-600 rounded-full text-lg font-semibold text-white hover:bg-pink-700 focus:outline-none focus:ring-4 focus:ring-pink-400">
-        Message Me
-      </a>
+      <p>
+        Let’s create wonderful memories together. Thank you for being the reason for my happiness. You are truly special to me! 🌹
+      </p>
     </div>
 
+    <div class="signature">Yours always,<br>John</div>
+
+    <!-- Let Me Know Button -->
+    <button class="let-me-know-button" id="letMeKnowButton">Let Me Know</button>
   </div>
 
   <script>
-    const fireworks = new Fireworks.default({
-      acceleration: 1.2,
-      friction: 0.95,
-      gravity: 1,
-      particles: 100,
-      speed: 5,
-      explosion: 0.8,
-      sound: true,
-    });
+    // Generate falling hearts
+    function createHearts() {
+      const heartContainer = document.getElementById('heartContainer');
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.animationDelay = Math.random() * 5 + 's';
+        heart.style.animationDuration = 3 + Math.random() * 2 + 's';
+        heartContainer.appendChild(heart);
 
-    fireworks.start();
-
-    // Function to trigger fireworks and redirect after animation
-    function handleButtonClick() {
-      // Trigger fireworks animation
-      fireworks.stop();
-      fireworks.start();
-
-      // Delay redirection after animation
-      setTimeout(() => {
-        window.location.href = 'https://wa.me/1234567890?text=Hey,%20I%20just%20saw%20your%20love%20letter%20and%20I%20m%20so%20happy!';
-      }, 2000);  // 2 seconds delay to wait for the animation to finish
+        // Remove hearts after animation ends
+        heart.addEventListener('animationend', () => heart.remove());
+      }
     }
 
-    // Add event listener for the button
-    document.querySelector('#messageButton').addEventListener('click', handleButtonClick);
-  </script>
+    createHearts();
+    setInterval(createHearts, 5000); // Continuously generate hearts
 
+    // Redirect to WhatsApp with a predefined message
+    document.getElementById('letMeKnowButton').addEventListener('click', () => {
+      window.location.href = 'https://wa.me/1234567890?text=Hey,%20I%20just%20read%20your%20beautiful%20letter!%20Let’s%20talk%20more!';
+    });
+  </script>
 </body>
 </html>
