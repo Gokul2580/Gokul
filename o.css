@@ -1,3 +1,9 @@
+    @import url('https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Proxima Nova', sans-serif;
+            padding:0;
+        }
         
         .fade-in {
             animation: fadeInUp 0.4s ease-in-out;
