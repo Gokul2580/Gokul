@@ -75,7 +75,7 @@
         /* Overlay Box */
         .overlay-box {
     position: fixed;
-    bottom: -100%; /* Keep it hidden initially */
+    bottom: -200%; /* Keep it hidden initially */
     left: 0;
     width: 100%;
     height: 95%;
