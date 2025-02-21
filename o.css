@@ -85,7 +85,7 @@
     transition: bottom 0.4s ease-in-out;
     z-index: 40;
     will-change: transform; /* Helps with smoother animation */
-    overflow-y: auto; /* Ensures internal scrolling */
+    
 }
 
         .overlay-box.show-overlay {
