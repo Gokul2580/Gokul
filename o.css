@@ -7,13 +7,7 @@
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        .slide-left {
-            animation: slideLeftFade 0.4s ease-in-out;
-        }
-        @keyframes slideLeftFade {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        
         .sticky-search {
             position: sticky;
             top: 0;
