@@ -27,32 +27,6 @@
             background: #E0E0E0;
         }
 
-/* Glassmorphism Card */
-.glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
-    padding: 16px;
-    width: 200px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
-}
-
-.glass-card:hover {
-    transform: scale(1.05);
-}
-
-        .glass {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: 0.3s;
-        }
-        /* Smooth Expand Effect */
-        .hidden { display: none; }
 
         .tag-style {
             background: linear-gradient(to right, #ff4b5c, #ff7a8c);
