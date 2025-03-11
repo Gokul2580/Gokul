@@ -239,3 +239,564 @@
             }
         }
 
+
+html ,body {
+
+    font-family: 'Inter', sans-serif;
+    font-weight: 100;
+        overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    height: 100dvh; /* Use dynamic viewport height */
+    /* Prevent unwanted scrolling */
+    
+}
+
+
+/* Glassmorphism Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 16px;
+    width: 200px;
+    max-width: 250px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.glass-card1:hover {
+    transform: scale(1.05);
+}
+
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: 0.3s;
+        }
+        /* Smooth Expand Effect */
+        .hidden { display: none; }
+        
+        
+        .glass-card1 {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 16px;
+    width: 370px;
+    max-width: 450px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.glass-card1:hover {
+    transform: scale(1.05);
+}
+
+        .glass1 {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: 0.3s;
+        }
+        /* Smooth Expand Effect */
+        .hidden { display: none; }
+
+/* Slide In (Right to Left) + Fade In */
+.slide-left {
+    animation: slideLeft 0.3s forwards, fadeIn 0.3s forwards;
+}
+
+/* Slide Out (Left to Right) + Fade Out */
+.slide-right {
+    animation: slideRight 0.3s forwards, fadeOut 0.3s forwards;
+}
+
+/* Keyframes */
+@keyframes slideLeft {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Fade Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
+/* Hide scrollbar for Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for IE, Edge */
+body {
+  -ms-overflow-style: none;
+}
+
+    .gradient-stroke {
+        stroke: url(#gradient);
+        stroke-width: 2;
+    }
+
+    /* Define Animated Gradient */
+    @keyframes gradientAnimation {
+        0% { stroke: #f97316; }  /* Orange */
+        50% { stroke: #ef4444; } /* Red */
+        100% { stroke: #f97316; } /* Orange */
+    }
+
+    /* Apply Animation */
+    .gradient-stroke {
+        animation: gradientAnimation 3s infinite ease-in-out;
+    }
+
+    /* Hundial (Donation Box) Bounce Animation */
+    @keyframes hundialBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .hundial {
+width: 70px;
+        height: 80px;
+                background: linear-gradient(to bottom, #D4A76A, #A87C4F);
+        border-radius: 12px;
+        position: relative;
+        margin: auto;
+        animation: emiBoxBounce 1.5s infinite ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Slot in Hundial */
+    .slot {
+        width: 50px;
+        height: 8px;
+        background: black;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 4px;
+    }
+
+    /* Coin Drop Animation */
+    @keyframes coinDrop {
+        0% { transform: translateY(-50px) scale(0.8); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(80px) scale(1); opacity: 0; }
+    }
+
+    .coin {
+        position: absolute;
+        left: 50%;
+        width: 30px;
+        height: 30px;
+        background: gold;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        animation: coinDrop 1.5s infinite ease-in-out;
+    }
+
+    .coin:nth-child(1) { animation-delay: 0.2s; }
+    .coin:nth-child(2) { animation-delay: 0.4s; }
+    .coin:nth-child(3) { animation-delay: 0.6s; }
+
+    /* Family EMI Box Bounce Animation */
+    @keyframes emiBoxBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .emi-box {
+        width: 70px;
+        height: 80px;
+        background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+        border-radius: 12px;
+        position: relative;
+        margin: auto;
+        animation: emiBoxBounce 1.5s infinite ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Slot for Coins */
+    .slot {
+        width: 50px;
+        height: 8px;
+        background: black;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 4px;
+    }
+
+    /* Coin Drop Animation */
+    @keyframes coinDrop {
+        0% { transform: translateY(-40px) scale(0.6); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(60px) scale(0.7); opacity: 0; }
+    }
+
+    .coin {
+        position: absolute;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        background: gold;
+        border-radius: 50%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        animation: coinDrop 1.2s infinite ease-in-out;
+    }
+
+    .coin:nth-child(1) { animation-delay: 0.2s; }
+    .coin:nth-child(2) { animation-delay: 0.4s; }
+    .coin:nth-child(3) { animation-delay: 0.6s; }
+
+    /* Shining Move Effect */
+    @keyframes shiningMove {
+        0% { background-position: -200px; }
+        100% { background-position: 200px; }
+    }
+
+    .shining-button {
+        background: linear-gradient(120deg, #4A00E0, #8E2DE2, #4A00E0);
+        background-size: 300% 100%;
+        color: white;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 0 15px rgba(142, 45, 226, 0.6);
+        animation: shiningMove 2s infinite linear;
+    }
+
+    .shining-button:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 25px rgba(142, 45, 226, 0.8);
+    }
+
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: max-height 0.4s ease-in-out, opacity 0.3s;
+            margin-bottom: 0;
+        }
+        /* Hidden State */
+        .hidden {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        /* Visible State */
+        .visible {
+            max-height: 780px;
+            opacity: 1;
+        }
+
+    .overlay-active {
+    pointer-events: none; /* Prevents background clicks & scroll */
+}
+
+.loader11 {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin11 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin11 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+        .chips-container { 
+            display: flex; 
+            overflow-x: auto; 
+            gap: 10px;
+            white-space: nowrap;
+            padding-bottom: 5px;
+            scrollbar-width: none; 
+        }
+        .chips-container::-webkit-scrollbar { display: none; }
+        
+        /* Material Chips */
+.chip {
+    background: #F3F4F6; /* bg-orange-200 */
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+    color: #7C2D12; /* Darker orange text for visibility */
+}
+
+.chip:hover {
+    background: #FBBF24; /* Slightly darker orange */
+}
+
+.active-chip {
+    background: linear-gradient(to right, #F97316, #EF4444) !important; /* Orange to Red Gradient */
+    color: white !important;
+}
+        
+        
+                 .chip1 {
+            background: #F3F4F6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+        
+        #vendorList {
+    max-height: 65vh; /* Adjust height as needed */
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* Hide scrollbar for IE & Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+    padding-bottom: 96px;
+}
+
+#vendorList::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari */
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: white;
+    position: relative;
+    width: 370px;
+}
+
+/* Increased Modal Width */
+@media (min-width: 768px) {
+    .glass-card {
+        width: 450px;
+    }
+}
+
+/* Glassmorphic Input */
+.glass-input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    color: white;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Neumorphic Buttons */
+.glass-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(145deg, #6a11cb, #2575fc);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.glass-button:hover {
+    background: linear-gradient(145deg, #2575fc, #6a11cb);
+}
+
+/* Close Button */
+.glass-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.glass-close:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Tooltip Animation */
+#emiTooltip {
+    transition: opacity 0.3s ease-in-out, visibility 0.3s;
+}
+
+/* Tooltip Auto-Hide Effect */
+.show-tooltip {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+.masonry {
+    column-count: 2; /* Two equal columns */
+    column-gap: 0.7rem; /* Adjust spacing */
+    max-width: 100%;
+    margin: auto;
+}
+
+.masonry-item {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+    display: inline-block; /* Important for proper alignment */
+    width: 100%;
+    margin-bottom: 0.7rem; /* Ensures proper stacking */
+}
+
+/* Fixes image sizing */
+.masonry-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Fixes text content */
+.masonry-item .content {
+    padding: 10px;
+}
+
+/* Ensures images don’t stretch and maintain aspect ratio */
+
+
+/* Add this to ensure images don’t stretch */
+
+
+/* Image Section */
+.masonry-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Content Section */
+.masonry-item .content {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+/* Staggered Heights */
+.masonry-item:nth-child(odd) {
+    grid-row: span 2; /* Every odd item takes 2 rows */
+}
+
+.masonry-item:nth-child(4n) {
+    grid-row: span 3; /* Every 4th item takes 3 rows */
+}
+
+/* Hover Effect */
+.masonry-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Wishlist Button */
+.wishlist-btn {
+    transition: background 0.3s ease-in-out;
+}
+.gradient-overlay {  
+            background: linear-gradient(to top, rgba(0,0,0,15), rgba(0,0,0,0));  
+        }  
+
+.wishlist-btn.active {
+    background: red !important;
+}
+
+
+        /* Button Style */
+        .open-btn {
+            padding: 12px 24px;
+            font-size: 18px;
+            background: #6200ea;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        /* Full-Screen Page */
+        .full-screen-page {
+            position: fixed;
+            z-index: 40;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+
+            transform: translateY(100%);
+            transition: transform 0.4s ease-in-out;
+        }
+        /* Show Animation */
+        .full-screen-page.active {
+            transform: translateY(0);
+        }
